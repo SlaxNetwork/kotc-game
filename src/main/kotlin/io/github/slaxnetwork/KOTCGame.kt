@@ -3,10 +3,14 @@ package io.github.slaxnetwork
 import com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin
 import io.github.slaxnetwork.bukkitcore.BukkitCoreAPI
 import io.github.slaxnetwork.commands.TestRunCommand
+import io.github.slaxnetwork.listeners.PlayerDeathListener
 import io.github.slaxnetwork.listeners.PlayerJoinListener
 import io.github.slaxnetwork.listeners.PlayerQuitListener
+import io.github.slaxnetwork.listeners.kotc.KOTCPlayerConnectionListeners
+import io.github.slaxnetwork.listeners.kotc.KOTCPlayerCrownListeners
 import io.github.slaxnetwork.microgame.maps.MapManager
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
+import io.github.slaxnetwork.waitingroom.WaitingRoomManager
 import net.kyori.adventure.text.minimessage.MiniMessage
 
 class KOTCGame : SuspendingJavaPlugin() {
@@ -22,6 +26,9 @@ class KOTCGame : SuspendingJavaPlugin() {
     lateinit var gameManager: GameManager
         private set
 
+    lateinit var waitingRoomManager: WaitingRoomManager
+        private set
+
     override suspend fun onEnableAsync() {
         saveDefaultConfig()
 
@@ -34,15 +41,21 @@ class KOTCGame : SuspendingJavaPlugin() {
         playerRegistry = KOTCPlayerRegistry()
 
         mapManager = MapManager(config.getConfigurationSection("games") ?: throw NullPointerException("games section doesn't exist."))
-        mapManager.initialize(config.getConfigurationSection("games") ?: throw NullPointerException("games section doesn't exist."))
+        mapManager.initialize()
 
         gameManager = GameManager(playerRegistry, mapManager, server.scheduler, server.pluginManager)
+
+        waitingRoomManager = WaitingRoomManager(playerRegistry, gameManager, bukkitCore.profileRegistry)
 
         getCommand("test")?.setExecutor(TestRunCommand(this))
 
         setOf(
-            PlayerJoinListener(playerRegistry),
-            PlayerQuitListener(playerRegistry)
+            PlayerJoinListener(playerRegistry, waitingRoomManager),
+            PlayerQuitListener(playerRegistry, gameManager),
+            PlayerDeathListener(playerRegistry),
+
+            KOTCPlayerConnectionListeners(),
+            KOTCPlayerCrownListeners()
         ).forEach { server.pluginManager.registerEvents(it, this) }
     }
 

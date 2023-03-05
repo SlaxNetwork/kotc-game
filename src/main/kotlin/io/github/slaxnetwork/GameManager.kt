@@ -34,6 +34,11 @@ class GameManager(
             field = value
         }
 
+    var hasStarted = false
+
+    var gameState: GameState = GameState.IN_LOBBY
+        private set
+
     val isRunningMicroGame: Boolean
         get() = currentMicroGame != null
 
@@ -70,6 +75,11 @@ class GameManager(
         microGameInstance.initializeListeners(pluginManager)
 
         microGameInstance.startPreGame()
+        gameState = GameState.IN_GAME
+
+        if(currentCrownHolder == null) {
+            randomlyAssignCrown()
+        }
     }
 
     /**
@@ -84,12 +94,24 @@ class GameManager(
             game.map.delete()
             game.endGame()
         }
-        currentMicroGame?.endGame()
+        gameState = GameState.IN_LOBBY
 
         // end kotc.
         if(round == MAX_ROUNDS) {
-
+            gameState = GameState.ENDING
         }
+    }
+
+    /**
+     * Randomly assign the crown to a player.
+     */
+    private fun randomlyAssignCrown() {
+        val kotcPlayer = playerRegistry.players.values
+            .filter { it.connected && !it.crownHolder }
+            .shuffled()
+            .firstOrNull()
+
+        kotcPlayer?.crownHolder = true
     }
 
     companion object {

@@ -15,6 +15,9 @@ abstract class MicroGame(
     val scheduler: BukkitScheduler,
     val playerRegistry: KOTCPlayerRegistry
 ) {
+    var preGameTimer: Int = PRE_GAME_TIMER_AMOUNT
+        private set
+
     val players get() = playerRegistry.players.values
 
     abstract val gameListenerInstances: Set<Listener>
@@ -22,8 +25,6 @@ abstract class MicroGame(
     abstract fun startPreGame()
 
     fun startPreGameTimer() {
-        var preGameTimer = 5
-
         scheduler.runTaskTimer(
             KOTCGame.get(),
             Consumer {
@@ -48,5 +49,10 @@ abstract class MicroGame(
 
     fun destroyListeners() {
         gameListenerInstances.forEach { HandlerList.unregisterAll(it) }
+    }
+
+    companion object {
+        // in seconds.
+        const val PRE_GAME_TIMER_AMOUNT = 25
     }
 }

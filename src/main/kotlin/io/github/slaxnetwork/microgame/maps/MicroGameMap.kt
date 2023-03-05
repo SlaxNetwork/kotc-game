@@ -29,14 +29,14 @@ interface MicroGameMap {
             val spawnPointSec = spawnPointsSection.getConfigurationSection(spawnPointId)
                 ?: continue
 
-            val location = Location.deserialize(mapOf(
-                "world" to Bukkit.getWorld(spawnPointSec.getString("world") ?: "world"),
-                "x" to spawnPointSec.getDouble("x"),
-                "y" to spawnPointSec.getDouble("y"),
-                "z" to spawnPointSec.getDouble("z"),
-                "yaw" to spawnPointSec.getDouble("yaw").toFloat(),
-                "pitch" to spawnPointSec.getDouble("pitch").toDouble()
-            ))
+            val location = Location(
+                Bukkit.getWorld("world"),
+                spawnPointSec.getDouble("x"),
+                spawnPointSec.getDouble("y"),
+                spawnPointSec.getDouble("z"),
+                spawnPointSec.getDouble("yaw").toFloat(),
+                spawnPointSec.getDouble("pitch").toFloat()
+            )
             locations.add(location)
         }
 

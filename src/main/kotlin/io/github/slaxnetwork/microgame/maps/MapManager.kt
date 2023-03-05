@@ -19,9 +19,8 @@ class MapManager(
 
     /**
      * Initialize all game maps into memory without loading their instances.
-     * @param gamesSection
      */
-    fun initialize(gamesSection: ConfigurationSection) {
+    fun initialize() {
         for(microGameId in gamesSection.getKeys(false)) {
             val microGame = try {
                MicroGameType.valueOf(microGameId.uppercase())
