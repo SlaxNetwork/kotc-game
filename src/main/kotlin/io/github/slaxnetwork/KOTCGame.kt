@@ -3,12 +3,13 @@ package io.github.slaxnetwork
 import com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin
 import io.github.slaxnetwork.bukkitcore.BukkitCoreAPI
 import io.github.slaxnetwork.commands.TestRunCommand
+import io.github.slaxnetwork.game.GameManager
 import io.github.slaxnetwork.listeners.PlayerDeathListener
 import io.github.slaxnetwork.listeners.PlayerJoinListener
 import io.github.slaxnetwork.listeners.PlayerQuitListener
 import io.github.slaxnetwork.listeners.kotc.KOTCPlayerConnectionListeners
 import io.github.slaxnetwork.listeners.kotc.KOTCPlayerCrownListeners
-import io.github.slaxnetwork.microgame.maps.MapManager
+import io.github.slaxnetwork.game.microgame.maps.MapManager
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
 import io.github.slaxnetwork.waitingroom.WaitingRoomManager
 import net.kyori.adventure.text.minimessage.MiniMessage
@@ -54,7 +55,7 @@ class KOTCGame : SuspendingJavaPlugin() {
             PlayerQuitListener(playerRegistry, gameManager),
             PlayerDeathListener(playerRegistry),
 
-            KOTCPlayerConnectionListeners(),
+            KOTCPlayerConnectionListeners(gameManager, playerRegistry, bukkitCore.profileRegistry),
             KOTCPlayerCrownListeners()
         ).forEach { server.pluginManager.registerEvents(it, this) }
     }

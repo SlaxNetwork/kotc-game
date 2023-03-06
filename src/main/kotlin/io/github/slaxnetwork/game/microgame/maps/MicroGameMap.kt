@@ -1,4 +1,4 @@
-package io.github.slaxnetwork.microgame.maps
+package io.github.slaxnetwork.game.microgame.maps
 
 import org.bukkit.Bukkit
 import org.bukkit.Location

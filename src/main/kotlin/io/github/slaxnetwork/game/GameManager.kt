@@ -1,20 +1,23 @@
-package io.github.slaxnetwork
+package io.github.slaxnetwork.game
 
-import io.github.slaxnetwork.microgame.MicroGame
-import io.github.slaxnetwork.microgame.MicroGameType
-import io.github.slaxnetwork.microgame.maps.MapManager
-import io.github.slaxnetwork.microgame.types.skywarsrush.SkyWarsRushMicroGame
+import io.github.slaxnetwork.game.microgame.MicroGame
+import io.github.slaxnetwork.game.microgame.MicroGameState
+import io.github.slaxnetwork.game.microgame.MicroGameType
+import io.github.slaxnetwork.game.microgame.maps.MapManager
+import io.github.slaxnetwork.game.microgame.types.skywarsrush.SkyWarsRushMicroGame
 import io.github.slaxnetwork.player.KOTCPlayer
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
 import org.bukkit.plugin.PluginManager
 import org.bukkit.scheduler.BukkitScheduler
 
 class GameManager(
-    private val playerRegistry: KOTCPlayerRegistry,
+    val playerRegistry: KOTCPlayerRegistry,
     private val mapManager: MapManager,
     private val scheduler: BukkitScheduler,
     private val pluginManager: PluginManager
 ) {
+    val rubiesHandler = RubiesHandler(this, scheduler)
+
     /**
      * Current KOTC round.
      */
@@ -24,7 +27,7 @@ class GameManager(
     /**
      * Current [MicroGame] instance being played.
      */
-    private var currentMicroGame: MicroGame? = null
+    var currentMicroGame: MicroGame? = null
         private set(value) {
             // inc round once micro game ends.
             if(value != null) {
@@ -35,9 +38,10 @@ class GameManager(
         }
 
     var hasStarted = false
-
-    var gameState: GameState = GameState.IN_LOBBY
         private set
+
+    val microGameState: MicroGameState
+        get() = currentMicroGame?.state ?: MicroGameState.NOT_RUNNING
 
     val isRunningMicroGame: Boolean
         get() = currentMicroGame != null
@@ -58,6 +62,10 @@ class GameManager(
             return
         }
 
+        if(!hasStarted) {
+            hasStarted = true
+        }
+
         val selectedMapId = mapId ?: mapManager.getRandomMapId(microGameType)
             ?: throw NullPointerException("no map for $microGameType has been selected.")
 
@@ -74,8 +82,9 @@ class GameManager(
         microGameInstance.map.initialize()
         microGameInstance.initializeListeners(pluginManager)
 
-        microGameInstance.startPreGame()
-        gameState = GameState.IN_GAME
+        microGameInstance.state = MicroGameState.IN_PRE_GAME
+
+        rubiesHandler.startRubiesRewardTask()
 
         if(currentCrownHolder == null) {
             randomlyAssignCrown()
@@ -90,15 +99,17 @@ class GameManager(
             return
         }
 
+        rubiesHandler.endRubiesRewardTask()
+
         currentMicroGame?.let { game ->
             game.map.delete()
             game.endGame()
         }
-        gameState = GameState.IN_LOBBY
+//        gameState = GameState.IN_LOBBY
 
         // end kotc.
         if(round == MAX_ROUNDS) {
-            gameState = GameState.ENDING
+//            gameState = GameState.ENDING
         }
     }
 

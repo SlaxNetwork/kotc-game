@@ -1,8 +1,7 @@
-package io.github.slaxnetwork.microgame.maps
+package io.github.slaxnetwork.game.microgame.maps
 
-import io.github.slaxnetwork.microgame.MicroGameType
-import io.github.slaxnetwork.microgame.types.skywarsrush.SkyWarsRushMap
-import org.bukkit.Bukkit
+import io.github.slaxnetwork.game.microgame.MicroGameType
+import io.github.slaxnetwork.game.microgame.types.skywarsrush.SkyWarsRushMap
 import org.bukkit.configuration.ConfigurationSection
 import java.util.*
 

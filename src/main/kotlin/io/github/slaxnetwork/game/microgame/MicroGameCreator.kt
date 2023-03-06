@@ -1,6 +1,6 @@
-package io.github.slaxnetwork.microgame
+package io.github.slaxnetwork.game.microgame
 
-import io.github.slaxnetwork.microgame.maps.MicroGameMap
+import io.github.slaxnetwork.game.microgame.maps.MicroGameMap
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
 import org.bukkit.event.Listener
 import org.bukkit.scheduler.BukkitScheduler

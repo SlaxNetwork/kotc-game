@@ -1,9 +1,11 @@
-package io.github.slaxnetwork.microgame.types.skywarsrush
+package io.github.slaxnetwork.game.microgame.types.skywarsrush
 
 import io.github.slaxnetwork.KOTCGame
+import io.github.slaxnetwork.game.microgame.MicroGame
+import io.github.slaxnetwork.game.microgame.MicroGameCreator
+import io.github.slaxnetwork.game.microgame.MicroGameType
 import io.github.slaxnetwork.listeners.skywarsrush.SkyWarsRushPlayerDeathListener
-import io.github.slaxnetwork.microgame.*
-import io.github.slaxnetwork.microgame.maps.MicroGameMap
+import io.github.slaxnetwork.game.microgame.maps.MicroGameMap
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
 import org.bukkit.Bukkit
 import org.bukkit.Location

@@ -1,6 +1,6 @@
 package io.github.slaxnetwork.listeners.skywarsrush
 
-import io.github.slaxnetwork.microgame.types.skywarsrush.SkyWarsRushMicroGame
+import io.github.slaxnetwork.game.microgame.types.skywarsrush.SkyWarsRushMicroGame
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener

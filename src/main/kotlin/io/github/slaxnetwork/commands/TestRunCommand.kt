@@ -1,7 +1,7 @@
 package io.github.slaxnetwork.commands
 
 import io.github.slaxnetwork.KOTCGame
-import io.github.slaxnetwork.microgame.MicroGameType
+import io.github.slaxnetwork.game.microgame.MicroGameType
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender

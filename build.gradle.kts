@@ -25,7 +25,9 @@ dependencies {
 
     implementation("me.tech:chestuiplus:1.0.0")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.10")
 
     implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.10.0")
     implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.10.0")

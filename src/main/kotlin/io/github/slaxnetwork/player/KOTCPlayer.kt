@@ -37,8 +37,7 @@ data class KOTCPlayer(
 
     var dead = false
 
-    fun addRubies(amount: Int): Int {
+    fun addRubies(amount: Int) {
         rubies += amount
-        return rubies
     }
 }

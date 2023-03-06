@@ -1,9 +1,7 @@
 package io.github.slaxnetwork.listeners
 
-import io.github.slaxnetwork.GameManager
-import io.github.slaxnetwork.events.KOTCPlayerDisconnectEvent
+import io.github.slaxnetwork.game.GameManager
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
-import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerQuitEvent
@@ -26,12 +24,5 @@ class PlayerQuitListener(
         }
 
         kotcPlayer.connected = false
-
-        Bukkit.getPluginManager().callEvent(KOTCPlayerDisconnectEvent(
-            kotcPlayer
-        ))
-
-//        kotcPlayer.connected = false
-//        kotcPlayer.dead = true
     }
 }

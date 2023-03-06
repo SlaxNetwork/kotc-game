@@ -1,6 +1,6 @@
 package io.github.slaxnetwork.waitingroom
 
-import io.github.slaxnetwork.GameManager
+import io.github.slaxnetwork.game.GameManager
 import io.github.slaxnetwork.bukkitcore.profile.ProfileRegistry
 import io.github.slaxnetwork.events.KOTCPlayerReconnectEvent
 import io.github.slaxnetwork.mm
@@ -14,8 +14,6 @@ class WaitingRoomManager(
     private val gameManager: GameManager,
     private val profileRegistry: ProfileRegistry
 ) {
-    private val gameState get() = gameManager.gameState
-
     private val gameHasStarted get() = gameManager.hasStarted
 
     fun teleport() {

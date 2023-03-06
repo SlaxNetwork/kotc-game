@@ -1,4 +1,4 @@
-package io.github.slaxnetwork.microgame
+package io.github.slaxnetwork.game.microgame
 
 enum class MicroGameType(
     val configId: String

@@ -1,7 +1,8 @@
-package io.github.slaxnetwork.microgame
+package io.github.slaxnetwork.game.microgame
 
 import io.github.slaxnetwork.KOTCGame
-import io.github.slaxnetwork.microgame.maps.MicroGameMap
+import io.github.slaxnetwork.game.microgame.maps.MicroGameMap
+import io.github.slaxnetwork.player.KOTCPlayer
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
 import org.bukkit.event.HandlerList
 import org.bukkit.event.Listener
@@ -15,6 +16,23 @@ abstract class MicroGame(
     val scheduler: BukkitScheduler,
     val playerRegistry: KOTCPlayerRegistry
 ) {
+    /**
+     * Current state of the [MicroGame].
+     */
+    var state: MicroGameState = MicroGameState.WAITING
+        set(value) {
+            when(value) {
+                MicroGameState.IN_PRE_GAME -> startPreGame()
+                MicroGameState.IN_GAME -> startGame()
+                MicroGameState.ENDING -> endGame()
+                else -> {}
+            }
+
+            field = value
+        }
+
+    var winner: KOTCPlayer? = null
+
     var preGameTimer: Int = PRE_GAME_TIMER_AMOUNT
         private set
 
@@ -32,7 +50,7 @@ abstract class MicroGame(
 
                 if(preGameTimer-- == 0) {
                     it.cancel()
-                    startGame()
+                    state = MicroGameState.IN_GAME
                 }
             },
             20L, 20L
