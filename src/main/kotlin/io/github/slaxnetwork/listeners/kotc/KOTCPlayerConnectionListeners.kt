@@ -18,7 +18,23 @@ class KOTCPlayerConnectionListeners(
 ) : Listener {
     @EventHandler
     fun onKOTCPlayerReconnect(ev: KOTCPlayerReconnectEvent) {
+    }
 
+    @EventHandler
+    fun onKOTCPlayerReconnectMidGame(ev: KOTCPlayerReconnectEvent) {
+        if(!gameManager.isRunningMicroGame) {
+            return
+        }
+
+        val bukkitPlayer = ev.kotcPlayer.bukkitPlayer
+            ?: return
+        val profile = profileRegistry.profiles[bukkitPlayer.uniqueId]
+            ?: return
+
+        bukkitPlayer.sendMessage(mm.deserialize(
+            "<icon:symbol_warning> <text>",
+            ProfileTags.translateText("test.message", profile) // warn about joining mid-match and not being able to join the micro game.
+        ))
     }
 
     @EventHandler

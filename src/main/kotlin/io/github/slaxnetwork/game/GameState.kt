@@ -1,4 +1,4 @@
-package io.github.slaxnetwork
+package io.github.slaxnetwork.game
 
 enum class GameState {
     IN_LOBBY,

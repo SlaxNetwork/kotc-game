@@ -56,7 +56,7 @@ class KOTCGame : SuspendingJavaPlugin() {
             PlayerDeathListener(playerRegistry),
 
             KOTCPlayerConnectionListeners(gameManager, playerRegistry, bukkitCore.profileRegistry),
-            KOTCPlayerCrownListeners()
+            KOTCPlayerCrownListeners(gameManager.rubiesHandler)
         ).forEach { server.pluginManager.registerEvents(it, this) }
     }
 

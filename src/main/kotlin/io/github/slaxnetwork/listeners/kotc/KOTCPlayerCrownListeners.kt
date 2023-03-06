@@ -3,6 +3,7 @@ package io.github.slaxnetwork.listeners.kotc
 import io.github.slaxnetwork.events.crown.KOTCCrownHolderDeathEvent
 import io.github.slaxnetwork.events.crown.KOTCPlayerCrownLostEvent
 import io.github.slaxnetwork.events.crown.KOTCPlayerCrownObtainedEvent
+import io.github.slaxnetwork.game.RubiesHandler
 import io.github.slaxnetwork.mm
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -10,7 +11,9 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.inventory.ItemStack
 
-class KOTCPlayerCrownListeners : Listener {
+class KOTCPlayerCrownListeners(
+    private val rubiesHandler: RubiesHandler
+) : Listener {
     @EventHandler
     fun onCrownObtained(ev: KOTCPlayerCrownObtainedEvent) {
         val bukkitPlayer = ev.kotcPlayer.bukkitPlayer
@@ -35,6 +38,7 @@ class KOTCPlayerCrownListeners : Listener {
 
         if(ev.killer != null) {
             ev.killer.crownHolder = true
+            rubiesHandler.addRubies(ev.killer, 100)
         } else {
             Bukkit.broadcast(mm.deserialize("<red>Nobody has taken the crown."))
         }
