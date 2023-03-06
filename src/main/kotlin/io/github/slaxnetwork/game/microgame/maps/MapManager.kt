@@ -1,5 +1,6 @@
 package io.github.slaxnetwork.game.microgame.maps
 
+import io.github.slaxnetwork.KOTCLogger
 import io.github.slaxnetwork.game.microgame.MicroGameType
 import io.github.slaxnetwork.game.microgame.types.skywarsrush.SkyWarsRushMap
 import org.bukkit.configuration.ConfigurationSection
@@ -38,6 +39,15 @@ class MapManager(
                 ?: throw NullPointerException("maps doesn't exist on $microGameId games section.")
 
             for(mapId in mapsSection.getKeys(false)) {
+                val enabled = mapsSection.getConfigurationSection(mapId)
+                    ?.getBoolean("enabled")
+                    ?: false
+
+                if(!enabled) {
+                    KOTCLogger.info("skipping $mapId as it's marked as disabled.")
+                    continue
+                }
+
                 _maps[microGame]
                     ?.add(mapId)
             }
