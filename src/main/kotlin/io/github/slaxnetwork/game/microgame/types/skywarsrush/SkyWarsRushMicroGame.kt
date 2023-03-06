@@ -21,8 +21,6 @@ class SkyWarsRushMicroGame(
     type = MicroGameType.SKYWARS_RUSH,
     map, scheduler, playerRegistry
 ) {
-    override var gameListenerInstances = mutableSetOf<Listener>()
-
     override fun startPreGame() {
         startPreGameTimer()
     }
@@ -43,25 +41,21 @@ class SkyWarsRushMicroGame(
                     .firstOrNull()
                     ?: throw NullPointerException("no location found.")
 
-                KOTCGame.get().logger.info(randomSpawnPoint.toString())
-
                 player.teleport(randomSpawnPoint)
                 takenSpawnPoints.add(randomSpawnPoint)
             }
     }
 
     override fun endGame() {
-        this.destroyListeners()
     }
 
     override fun initializeListeners(pluginManager: PluginManager) {
-        val plugin = KOTCGame.get()
-
-        gameListenerInstances.addAll(setOf(
-            SkyWarsRushPlayerDeathListener(this)
-        ))
-
-        gameListenerInstances.forEach { pluginManager.registerEvents(it, plugin) }
+        registerListeners(
+            setOf(
+                SkyWarsRushPlayerDeathListener(this)
+            ),
+            pluginManager
+        )
     }
 
     companion object : MicroGameCreator<SkyWarsRushMicroGame> {

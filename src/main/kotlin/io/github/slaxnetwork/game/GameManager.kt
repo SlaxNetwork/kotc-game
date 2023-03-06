@@ -102,10 +102,11 @@ class GameManager(
         rubiesHandler.endRubiesRewardTask()
 
         currentMicroGame?.let { game ->
+            game.state = MicroGameState.ENDING
+
             game.map.delete()
-            game.endGame()
+            game.destroyListeners()
         }
-//        gameState = GameState.IN_LOBBY
 
         // end kotc.
         if(round == MAX_ROUNDS) {

@@ -38,7 +38,7 @@ abstract class MicroGame(
 
     val players get() = playerRegistry.players.values
 
-    abstract val gameListenerInstances: Set<Listener>
+    private val gameListeners = mutableSetOf<Listener>()
 
     abstract fun startPreGame()
 
@@ -65,8 +65,22 @@ abstract class MicroGame(
 
     abstract fun initializeListeners(pluginManager: PluginManager)
 
+    protected fun registerListeners(
+        listeners: Set<Listener>,
+        pluginManager: PluginManager
+    ) {
+        gameListeners.addAll(listeners)
+
+        for(listener in gameListeners) {
+            pluginManager.registerEvents(listener, KOTCGame.get())
+        }
+    }
+
     fun destroyListeners() {
-        gameListenerInstances.forEach { HandlerList.unregisterAll(it) }
+        for(listener in gameListeners) {
+            HandlerList.unregisterAll(listener)
+        }
+        gameListeners.clear()
     }
 
     companion object {
