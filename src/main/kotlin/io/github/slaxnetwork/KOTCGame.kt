@@ -48,8 +48,18 @@ class KOTCGame : SuspendingJavaPlugin() {
 
         waitingRoomManager = WaitingRoomManager(playerRegistry, gameManager, bukkitCore.profileRegistry)
 
+        registerCommands()
+        registerListeners()
+    }
+
+    private fun registerCommands() {
+        // non-suspending commands.
         getCommand("test")?.setExecutor(TestRunCommand(this))
 
+    }
+
+    private fun registerListeners() {
+        // non-suspending listeners.
         setOf(
             PlayerJoinListener(playerRegistry, waitingRoomManager),
             PlayerQuitListener(playerRegistry, gameManager),

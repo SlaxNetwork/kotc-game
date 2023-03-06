@@ -1,7 +1,10 @@
 package io.github.slaxnetwork
 
+import java.util.logging.Logger
+
 object KOTCLogger {
-    private val logger by lazyOf(KOTCGame.get().logger)
+    private val logger: Logger
+        get() = KOTCGame.get().logger
 
     fun info(message: String) {
         logger.info(message)

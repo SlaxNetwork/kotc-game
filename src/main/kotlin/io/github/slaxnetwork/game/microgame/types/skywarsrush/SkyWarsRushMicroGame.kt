@@ -1,32 +1,28 @@
 package io.github.slaxnetwork.game.microgame.types.skywarsrush
 
-import io.github.slaxnetwork.KOTCGame
+import io.github.slaxnetwork.KOTCLogger
 import io.github.slaxnetwork.game.microgame.MicroGame
-import io.github.slaxnetwork.game.microgame.MicroGameCreator
 import io.github.slaxnetwork.game.microgame.MicroGameType
 import io.github.slaxnetwork.listeners.skywarsrush.SkyWarsRushPlayerDeathListener
 import io.github.slaxnetwork.game.microgame.maps.MicroGameMap
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
-import org.bukkit.Bukkit
 import org.bukkit.Location
-import org.bukkit.event.Listener
 import org.bukkit.plugin.PluginManager
 import org.bukkit.scheduler.BukkitScheduler
 
 class SkyWarsRushMicroGame(
-    map: SkyWarsRushMap,
+    map: MicroGameMap,
     scheduler: BukkitScheduler,
     playerRegistry: KOTCPlayerRegistry
 ) : MicroGame(
     type = MicroGameType.SKYWARS_RUSH,
-    map, scheduler, playerRegistry
+    map, scheduler, playerRegistry,
+    preGameTimer = 30
 ) {
-    override fun startPreGame() {
-        startPreGameTimer()
-    }
+    override fun startPreGame() { }
 
     override fun tickPreGameTimer() {
-        Bukkit.getLogger().info("Ticked timer.")
+        KOTCLogger.info("Ticked timer.")
     }
 
     override fun startGame() {
@@ -56,19 +52,5 @@ class SkyWarsRushMicroGame(
             ),
             pluginManager
         )
-    }
-
-    companion object : MicroGameCreator<SkyWarsRushMicroGame> {
-        override fun create(
-            scheduler: BukkitScheduler,
-            map: MicroGameMap,
-            playerRegistry: KOTCPlayerRegistry
-        ): SkyWarsRushMicroGame {
-            if (map !is SkyWarsRushMap) {
-                throw IllegalArgumentException("${map.id} is not a SkyWarsRushMap.")
-            }
-
-            return SkyWarsRushMicroGame(map, scheduler, playerRegistry)
-        }
     }
 }

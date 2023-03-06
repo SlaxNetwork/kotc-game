@@ -5,10 +5,10 @@ import org.bukkit.Location
 import org.bukkit.configuration.ConfigurationSection
 
 class SkyWarsRushMap(
-    override val id: String,
-    override val mapSection: ConfigurationSection
-): MicroGameMap {
-    override val spawnPoints: Set<Location> = getSpawnPointsFromConfig()
+    id: String,
+    mapSection: ConfigurationSection
+): MicroGameMap(id, mapSection) {
+    override fun initialize() {
 
-    override fun initialize() { }
+    }
 }

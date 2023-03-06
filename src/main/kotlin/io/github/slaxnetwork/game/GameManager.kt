@@ -71,7 +71,7 @@ class GameManager(
         val mapInstance = mapManager.loadMapInstance(microGameType, selectedMapId)
 
         val microGameInstance = when(microGameType) {
-            MicroGameType.SKYWARS_RUSH -> SkyWarsRushMicroGame.create(scheduler, mapInstance, playerRegistry)
+            MicroGameType.SKYWARS_RUSH -> SkyWarsRushMicroGame(mapInstance, scheduler, playerRegistry)
 
             else -> throw IllegalStateException("$microGameType is not a supported micro game.")
         }

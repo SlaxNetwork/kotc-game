@@ -19,7 +19,6 @@ class PlayerQuitListener(
 
         if(!gameManager.hasGameStarted) {
             playerRegistry.remove(uuid)
-
             return
         }
 

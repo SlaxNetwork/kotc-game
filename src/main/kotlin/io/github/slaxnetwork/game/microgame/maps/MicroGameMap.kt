@@ -1,43 +1,35 @@
 package io.github.slaxnetwork.game.microgame.maps
 
-import org.bukkit.Bukkit
+import io.github.slaxnetwork.utils.toBukkitLocation
 import org.bukkit.Location
 import org.bukkit.configuration.ConfigurationSection
 
-interface MicroGameMap {
-    val id: String
+abstract class MicroGameMap(
+    val id: String,
+    private val mapSection: ConfigurationSection
+) {
+    val spawnPoints: Set<Location> = getSpawnPointsFromConfig()
 
-    val spawnPoints: Set<Location>
+    open fun initialize() { }
 
-    val mapSection: ConfigurationSection
-
-    fun initialize() { }
-
-    fun delete() { }
+    open fun delete() { }
 
     /**
      * All valid spawn points from the configuration.
      * @return spawn locations.
      */
-    fun getSpawnPointsFromConfig(): Set<Location> {
+    private fun getSpawnPointsFromConfig(): Set<Location> {
         val spawnPointsSection = mapSection.getConfigurationSection("spawnpoints")
             ?: return emptySet()
 
         val locations = mutableSetOf<Location>()
 
         for(spawnPointId in spawnPointsSection.getKeys(false)) {
-            val spawnPointSec = spawnPointsSection.getConfigurationSection(spawnPointId)
+            val spawnPointLocation = spawnPointsSection.getConfigurationSection(spawnPointId)
+                ?.toBukkitLocation()
                 ?: continue
 
-            val location = Location(
-                Bukkit.getWorld("world"),
-                spawnPointSec.getDouble("x"),
-                spawnPointSec.getDouble("y"),
-                spawnPointSec.getDouble("z"),
-                spawnPointSec.getDouble("yaw").toFloat(),
-                spawnPointSec.getDouble("pitch").toFloat()
-            )
-            locations.add(location)
+            locations.add(spawnPointLocation)
         }
 
         return locations

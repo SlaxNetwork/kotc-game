@@ -14,7 +14,9 @@ abstract class MicroGame(
     val type: MicroGameType,
     val map: MicroGameMap,
     val scheduler: BukkitScheduler,
-    val playerRegistry: KOTCPlayerRegistry
+    val playerRegistry: KOTCPlayerRegistry,
+
+    private var preGameTimer: Int = 30
 ) {
     /**
      * Current state of the [MicroGame].
@@ -22,7 +24,10 @@ abstract class MicroGame(
     var state: MicroGameState = MicroGameState.WAITING
         set(value) {
             when(value) {
-                MicroGameState.IN_PRE_GAME -> startPreGame()
+                MicroGameState.IN_PRE_GAME -> {
+                    startPreGame()
+                    startPreGameTimer()
+                }
                 MicroGameState.IN_GAME -> startGame()
                 MicroGameState.ENDING -> endGame()
                 else -> {}
@@ -32,9 +37,6 @@ abstract class MicroGame(
         }
 
     var winner: KOTCPlayer? = null
-
-    var preGameTimer: Int = PRE_GAME_TIMER_AMOUNT
-        private set
 
     val players get() = playerRegistry.players.values
 
@@ -46,7 +48,7 @@ abstract class MicroGame(
      * Start a timer that will tick down until
      * the game starts.
      */
-    fun startPreGameTimer() {
+    private fun startPreGameTimer() {
         scheduler.runTaskTimer(
             KOTCGame.get(),
             Consumer {
@@ -100,12 +102,5 @@ abstract class MicroGame(
             HandlerList.unregisterAll(listener)
         }
         gameListeners.clear()
-    }
-
-    companion object {
-        /**
-         * Amount of seconds the pre-game timer should run for.
-         */
-        const val PRE_GAME_TIMER_AMOUNT = 25 // seconds
     }
 }
