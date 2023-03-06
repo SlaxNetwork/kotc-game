@@ -42,6 +42,10 @@ abstract class MicroGame(
 
     abstract fun startPreGame()
 
+    /**
+     * Start a timer that will tick down until
+     * the game starts.
+     */
     fun startPreGameTimer() {
         scheduler.runTaskTimer(
             KOTCGame.get(),
@@ -57,14 +61,26 @@ abstract class MicroGame(
         )
     }
 
+    /**
+     * Method that will run every time the pre-game timer
+     * is ticked.
+     */
     abstract fun tickPreGameTimer()
 
     abstract fun startGame()
 
     abstract fun endGame()
 
+    /**
+     * Initialize all [Listener] related to a [MicroGame]
+     */
     abstract fun initializeListeners(pluginManager: PluginManager)
 
+    /**
+     * Register the set of [Listener].
+     * @param listeners Listeners to register.
+     * @param pluginManager [PluginManager]
+     */
     protected fun registerListeners(
         listeners: Set<Listener>,
         pluginManager: PluginManager
@@ -76,6 +92,9 @@ abstract class MicroGame(
         }
     }
 
+    /**
+     * Unregister all listeners assigned to a [MicroGame].
+     */
     fun destroyListeners() {
         for(listener in gameListeners) {
             HandlerList.unregisterAll(listener)
@@ -84,7 +103,9 @@ abstract class MicroGame(
     }
 
     companion object {
-        // in seconds.
-        const val PRE_GAME_TIMER_AMOUNT = 25
+        /**
+         * Amount of seconds the pre-game timer should run for.
+         */
+        const val PRE_GAME_TIMER_AMOUNT = 25 // seconds
     }
 }

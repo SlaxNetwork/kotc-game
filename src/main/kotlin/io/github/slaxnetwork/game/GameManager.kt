@@ -37,8 +37,11 @@ class GameManager(
             field = value
         }
 
-    var hasStarted = false
-        private set
+    /**
+     * Whether the game has started.
+     */
+    val hasGameStarted: Boolean
+        get() = round > 0
 
     val microGameState: MicroGameState
         get() = currentMicroGame?.state ?: MicroGameState.NOT_RUNNING
@@ -60,10 +63,6 @@ class GameManager(
     fun startMicroGame(microGameType: MicroGameType, mapId: String? = null) {
         if(currentMicroGame != null) {
             return
-        }
-
-        if(!hasStarted) {
-            hasStarted = true
         }
 
         val selectedMapId = mapId ?: mapManager.getRandomMapId(microGameType)

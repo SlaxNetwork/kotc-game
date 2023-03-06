@@ -4,6 +4,9 @@ import io.github.slaxnetwork.player.KOTCPlayer
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 
+/**
+ * [KOTCPlayer] has obtained the crown.
+ */
 class KOTCPlayerCrownObtainedEvent(
     val kotcPlayer: KOTCPlayer
 ) : Event() {

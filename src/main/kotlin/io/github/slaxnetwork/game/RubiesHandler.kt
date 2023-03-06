@@ -12,6 +12,10 @@ class RubiesHandler(
 ) {
     private var crownHolderRewardTask: BukkitTask? = null
 
+    /**
+     * Start the task to give the current crown holder
+     * a certain amount of rubies every so often.
+     */
     fun startRubiesRewardTask() {
         val runnable = Runnable {
             val currentCrownHolder = gameManager.currentCrownHolder
@@ -35,6 +39,9 @@ class RubiesHandler(
         crownHolderRewardTask = scheduler.runTaskTimer(KOTCGame.get(), runnable, 0L, 60L)
     }
 
+    /**
+     * End the task that gives the current crown holder rubies.
+     */
     fun endRubiesRewardTask() {
         crownHolderRewardTask?.let {
             it.cancel()

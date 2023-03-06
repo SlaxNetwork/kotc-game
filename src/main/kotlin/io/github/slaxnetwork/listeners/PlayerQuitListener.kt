@@ -17,7 +17,7 @@ class PlayerQuitListener(
         val kotcPlayer = playerRegistry.players[uuid]
             ?: return
 
-        if(!gameManager.hasStarted) {
+        if(!gameManager.hasGameStarted) {
             playerRegistry.remove(uuid)
 
             return

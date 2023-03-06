@@ -4,6 +4,9 @@ import io.github.slaxnetwork.player.KOTCPlayer
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 
+/**
+ * [KOTCPlayer] that was formerly holding the crown has died.
+ */
 class KOTCCrownHolderDeathEvent(
     val victim: KOTCPlayer,
     val killer: KOTCPlayer?

@@ -14,7 +14,7 @@ class WaitingRoomManager(
     private val gameManager: GameManager,
     private val profileRegistry: ProfileRegistry
 ) {
-    private val gameHasStarted get() = gameManager.hasStarted
+    private val gameHasStarted get() = gameManager.hasGameStarted
 
     fun teleport() {
     }
