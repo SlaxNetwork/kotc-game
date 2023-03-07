@@ -23,7 +23,7 @@ abstract class MicroGameMap(
             throw IllegalArgumentException("Border radius of map $id isn't set.")
         }
         if (!mapSection.isInt("border_radius")) {
-            throw IllegalArgumentException("Border radius of map $id isn't at integer.")
+            throw IllegalArgumentException("Border radius of map $id isn't an integer.")
         }
         return mapSection.getInt("border_radius")
     }
