@@ -10,9 +10,28 @@ abstract class MicroGameMap(
 ) {
     val spawnPoints: Set<Location> = getSpawnPointsFromConfig()
 
+    val center: Location = mapSection.getConfigurationSection("center")?.toBukkitLocation()
+        ?: throw IllegalArgumentException("Map $id doesn't have a center point set in config.")
+
+    val borderRadius: Int = getBorderRadiusFromConfig()
+
     open fun initialize() { }
 
     open fun delete() { }
+
+    /**
+     * Border radius from the configuration
+     * @return the border radius.
+     */
+    private fun getBorderRadiusFromConfig(): Int {
+        if (!mapSection.isSet("border_radius")) {
+            throw IllegalArgumentException("Border radius of map $id isn't set.")
+        }
+        if (!mapSection.isInt("border_radius")) {
+            throw IllegalArgumentException("Border radius of map $id isn't an integer.")
+        }
+        return mapSection.getInt("border_radius")
+    }
 
     /**
      * All valid spawn points from the configuration.
