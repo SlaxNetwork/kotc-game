@@ -4,6 +4,7 @@ import io.github.slaxnetwork.game.microgame.MicroGame
 import io.github.slaxnetwork.game.microgame.MicroGameState
 import io.github.slaxnetwork.game.microgame.MicroGameType
 import io.github.slaxnetwork.game.microgame.maps.MapManager
+import io.github.slaxnetwork.game.microgame.types.pvprun.PvPRunMicroGame
 import io.github.slaxnetwork.game.microgame.types.skywarsrush.SkyWarsRushMicroGame
 import io.github.slaxnetwork.player.KOTCPlayer
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
@@ -71,9 +72,8 @@ class GameManager(
         val mapInstance = mapManager.loadMapInstance(microGameType, selectedMapId)
 
         val microGameInstance = when(microGameType) {
+            MicroGameType.PVPRUN -> PvPRunMicroGame(mapInstance, scheduler, playerRegistry)
             MicroGameType.SKYWARS_RUSH -> SkyWarsRushMicroGame(mapInstance, scheduler, playerRegistry)
-
-            else -> throw IllegalStateException("$microGameType is not a supported micro game.")
         }
 
         currentMicroGame = microGameInstance

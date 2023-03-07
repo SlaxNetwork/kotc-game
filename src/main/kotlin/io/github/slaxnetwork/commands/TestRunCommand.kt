@@ -16,7 +16,7 @@ class TestRunCommand(
         label: String,
         args: Array<out String>
     ): Boolean {
-        inst.gameManager.startMicroGame(MicroGameType.SKYWARS_RUSH)
+        inst.gameManager.startMicroGame(MicroGameType.PVPRUN)
 
         inst.logger.info(inst.gameManager.isRunningMicroGame.toString())
 
