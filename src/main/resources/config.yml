@@ -16,6 +16,12 @@ games:
     maps:
       test:
         enabled: true
+        center:
+          x: 0.0
+          y: 0.0
+          z: 0.0
+          world: 'world'
+        border_radius: 100
         spawnpoints:
           0:
             x: 0.0
