@@ -7,6 +7,7 @@ import io.github.slaxnetwork.game.microgame.maps.MapManager
 import io.github.slaxnetwork.game.microgame.types.skywarsrush.SkyWarsRushMicroGame
 import io.github.slaxnetwork.player.KOTCPlayer
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
+import org.apache.commons.lang3.ObjectUtils.Null
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.plugin.PluginManager
@@ -133,10 +134,10 @@ class GameManager(
      * Update the world's world border.
      */
     private fun updateWorldBorder(center: Location, size: Double) {
-        val world = Bukkit.getWorld("world")
+        val world = Bukkit.getWorld("world") ?: throw NullPointerException("World is null @ updateWorldBorder")
 
-        world?.worldBorder?.center = center
-        world?.worldBorder?.size = size
+        world.worldBorder.center = center
+        world.worldBorder.size = size
     }
 
     companion object {
