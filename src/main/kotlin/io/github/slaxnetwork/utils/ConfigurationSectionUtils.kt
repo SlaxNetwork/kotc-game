@@ -8,10 +8,10 @@ import org.bukkit.configuration.ConfigurationSection
  * Convert a [ConfigurationSection] into a [Location]
  * @return [Location] or else null if an exception is thrown.
  */
-fun ConfigurationSection.toBukkitLocation(): Location? {
+fun ConfigurationSection.toBukkitLocation(world: String? = null): Location? {
     return try {
         val location = Location(
-            Bukkit.getWorld(getString("world") ?: "world"),
+            Bukkit.getWorld(world ?: "world"),
             getDouble("x"),
             getDouble("y"),
             getDouble("z")

@@ -7,6 +7,8 @@ import io.github.slaxnetwork.game.microgame.maps.MapManager
 import io.github.slaxnetwork.game.microgame.types.skywarsrush.SkyWarsRushMicroGame
 import io.github.slaxnetwork.player.KOTCPlayer
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
+import org.bukkit.Bukkit
+import org.bukkit.Location
 import org.bukkit.plugin.PluginManager
 import org.bukkit.scheduler.BukkitScheduler
 
@@ -81,6 +83,8 @@ class GameManager(
         microGameInstance.map.initialize()
         microGameInstance.initializeListeners(pluginManager)
 
+        updateWorldBorder(mapInstance.center, mapInstance.borderRadius)
+
         microGameInstance.state = MicroGameState.IN_PRE_GAME
 
         rubiesHandler.startRubiesRewardTask()
@@ -123,6 +127,16 @@ class GameManager(
             .firstOrNull()
 
         kotcPlayer?.crownHolder = true
+    }
+
+    /**
+     * Update the world's world border.
+     */
+    private fun updateWorldBorder(center: Location, size: Double) {
+        val world = Bukkit.getWorld("world")
+
+        world?.worldBorder?.center = center
+        world?.worldBorder?.size = size
     }
 
     companion object {
