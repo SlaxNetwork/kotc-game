@@ -21,7 +21,7 @@ games:
           x: 0.0
           y: 0.0
           z: 0.0
-        border_radius: 100
+        border_radius: 100.0
         spawnpoints:
           0:
             x: 0.0

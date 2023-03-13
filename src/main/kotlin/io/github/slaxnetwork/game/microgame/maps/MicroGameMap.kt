@@ -13,7 +13,7 @@ abstract class MicroGameMap(
     val center: Location = mapSection.getConfigurationSection("center")?.toBukkitLocation()
         ?: throw IllegalArgumentException("Map $id doesn't have a center point set in config.")
 
-    val borderRadius: Int = getBorderRadiusFromConfig()
+    val borderRadius: Double = getBorderRadiusFromConfig()
 
     open fun initialize() { }
 
@@ -23,14 +23,14 @@ abstract class MicroGameMap(
      * Border radius from the configuration
      * @return the border radius.
      */
-    private fun getBorderRadiusFromConfig(): Int {
-        if (!mapSection.isSet("border_radius")) {
+    private fun getBorderRadiusFromConfig(): Double {
+        if (!mapSection.isDouble("border_radius")) {
             throw IllegalArgumentException("Border radius of map $id isn't set.")
         }
-        if (!mapSection.isInt("border_radius")) {
+        if (!mapSection.isDouble("border_radius")) {
             throw IllegalArgumentException("Border radius of map $id isn't an integer.")
         }
-        return mapSection.getInt("border_radius")
+        return mapSection.getDouble("border_radius")
     }
 
     /**
