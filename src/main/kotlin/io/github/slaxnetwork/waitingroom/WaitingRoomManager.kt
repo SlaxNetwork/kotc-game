@@ -1,20 +1,21 @@
 package io.github.slaxnetwork.waitingroom
 
-import io.github.slaxnetwork.game.GameManager
 import io.github.slaxnetwork.bukkitcore.profile.ProfileRegistry
-import io.github.slaxnetwork.events.KOTCPlayerReconnectEvent
-import io.github.slaxnetwork.mm
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
-import org.bukkit.Bukkit
+import io.github.slaxnetwork.utils.toBukkitLocation
+import org.bukkit.Location
+import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
 import java.util.UUID
 
 class WaitingRoomManager(
+    private val waitingRoomSection: ConfigurationSection,
     private val playerRegistry: KOTCPlayerRegistry,
-    private val gameManager: GameManager,
     private val profileRegistry: ProfileRegistry
 ) {
-    private val gameHasStarted get() = gameManager.hasGameStarted
+    private val spawnPoint: Location = waitingRoomSection.getConfigurationSection("spawn_point")
+        ?.toBukkitLocation(waitingRoomSection.getString("world") ?: "world")
+        ?: throw IllegalArgumentException("waiting room doesn't have a spawn point set.")
 
     fun teleport() {
     }
@@ -22,25 +23,42 @@ class WaitingRoomManager(
     fun joinServer(player: Player) {
         val kotcPlayer = playerRegistry.players[player.uniqueId]
 
-        if(gameHasStarted) {
-            if(kotcPlayer == null) {
-                player.kick(mm.deserialize("<red>Game in session."))
-                return
-            }
-
-            kotcPlayer.connected = true
-
-            Bukkit.getPluginManager().callEvent(KOTCPlayerReconnectEvent(
-                kotcPlayer
-            ))
-            return
-        }
+//        if(gameHasStarted) {
+//            if(kotcPlayer == null) {
+//                player.kick(mm.deserialize("<red>Game in session."))
+//                return
+//            }
+//
+//            kotcPlayer.connected = true
+//
+//            Bukkit.getPluginManager().callEvent(KOTCPlayerReconnectEvent(
+//                kotcPlayer
+//            ))
+//            return
+//        }
 
         playerRegistry.add(player.uniqueId)
         teleport()
     }
 
     fun leaveServer(uuid: UUID) {
+    }
+
+    fun setWorldBorder() {
+        val borderSection = waitingRoomSection.getConfigurationSection("border")
+            ?: throw NullPointerException("section border for waiting_room isn't set.")
+
+        if(!borderSection.isDouble("radius")) {
+            throw IllegalArgumentException("border radius for waiting_room isn't set.")
+        }
+        val radius = borderSection.getDouble("radius")
+
+        val worldBorder = spawnPoint.world.worldBorder
+
+        worldBorder.center = spawnPoint
+        worldBorder.size = radius
+        worldBorder.damageAmount = 0.0
+        worldBorder.damageBuffer = 1.0
     }
 
     companion object {

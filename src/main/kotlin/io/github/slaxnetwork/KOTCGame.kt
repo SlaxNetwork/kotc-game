@@ -2,6 +2,7 @@ package io.github.slaxnetwork
 
 import com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin
 import io.github.slaxnetwork.bukkitcore.BukkitCoreAPI
+import io.github.slaxnetwork.commands.EndGameCommand
 import io.github.slaxnetwork.commands.TestRunCommand
 import io.github.slaxnetwork.game.GameManager
 import io.github.slaxnetwork.listeners.PlayerDeathListener
@@ -31,7 +32,7 @@ class KOTCGame : SuspendingJavaPlugin() {
         private set
 
     override suspend fun onEnableAsync() {
-        saveDefaultConfig()
+        saveResource("config.yml", true)
 
         bukkitCore = BukkitCoreAPI.get(server.servicesManager)
             ?: throw RuntimeException("bukkit-core was unable to be loaded.")
@@ -44,9 +45,9 @@ class KOTCGame : SuspendingJavaPlugin() {
         mapManager = MapManager(config.getConfigurationSection("games") ?: throw NullPointerException("games section doesn't exist."))
         mapManager.initialize()
 
-        gameManager = GameManager(playerRegistry, mapManager, server.scheduler, server.pluginManager)
+        waitingRoomManager = WaitingRoomManager(config.getConfigurationSection("waiting_room") ?: throw NullPointerException(), playerRegistry, bukkitCore.profileRegistry)
 
-        waitingRoomManager = WaitingRoomManager(playerRegistry, gameManager, bukkitCore.profileRegistry)
+        gameManager = GameManager(playerRegistry, waitingRoomManager, mapManager, server.scheduler, server.pluginManager)
 
         registerCommands()
         registerListeners()
@@ -55,7 +56,7 @@ class KOTCGame : SuspendingJavaPlugin() {
     private fun registerCommands() {
         // non-suspending commands.
         getCommand("test")?.setExecutor(TestRunCommand(this))
-
+        getCommand("endgame")?.setExecutor(EndGameCommand())
     }
 
     private fun registerListeners() {
