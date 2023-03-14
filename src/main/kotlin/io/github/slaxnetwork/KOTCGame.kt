@@ -5,12 +5,12 @@ import io.github.slaxnetwork.bukkitcore.BukkitCoreAPI
 import io.github.slaxnetwork.commands.EndGameCommand
 import io.github.slaxnetwork.commands.TestRunCommand
 import io.github.slaxnetwork.game.GameManager
+import io.github.slaxnetwork.game.microgame.maps.MapManager
 import io.github.slaxnetwork.listeners.PlayerDeathListener
 import io.github.slaxnetwork.listeners.PlayerJoinListener
 import io.github.slaxnetwork.listeners.PlayerQuitListener
 import io.github.slaxnetwork.listeners.kotc.KOTCPlayerConnectionListeners
 import io.github.slaxnetwork.listeners.kotc.KOTCPlayerCrownListeners
-import io.github.slaxnetwork.game.microgame.maps.MapManager
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
 import io.github.slaxnetwork.waitingroom.WaitingRoomManager
 import net.kyori.adventure.text.minimessage.MiniMessage

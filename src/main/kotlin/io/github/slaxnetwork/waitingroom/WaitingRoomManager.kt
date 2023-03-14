@@ -6,7 +6,7 @@ import io.github.slaxnetwork.utils.toBukkitLocation
 import org.bukkit.Location
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
-import java.util.UUID
+import java.util.*
 
 class WaitingRoomManager(
     private val waitingRoomSection: ConfigurationSection,

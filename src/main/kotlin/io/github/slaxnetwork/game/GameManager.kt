@@ -8,8 +8,6 @@ import io.github.slaxnetwork.game.microgame.types.skywarsrush.SkyWarsRushMicroGa
 import io.github.slaxnetwork.player.KOTCPlayer
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
 import io.github.slaxnetwork.waitingroom.WaitingRoomManager
-import org.bukkit.Bukkit
-import org.bukkit.Location
 import org.bukkit.plugin.PluginManager
 import org.bukkit.scheduler.BukkitScheduler
 

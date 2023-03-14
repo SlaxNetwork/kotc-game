@@ -5,7 +5,6 @@ import io.github.slaxnetwork.game.microgame.MicroGameType
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.Player
 
 class TestRunCommand(
     private val inst: KOTCGame

@@ -1,10 +1,10 @@
 package io.github.slaxnetwork.listeners.kotc
 
-import io.github.slaxnetwork.game.GameManager
 import io.github.slaxnetwork.bukkitcore.minimessage.tags.ProfileTags
 import io.github.slaxnetwork.bukkitcore.profile.ProfileRegistry
 import io.github.slaxnetwork.events.KOTCPlayerDisconnectEvent
 import io.github.slaxnetwork.events.KOTCPlayerReconnectEvent
+import io.github.slaxnetwork.game.GameManager
 import io.github.slaxnetwork.mm
 import io.github.slaxnetwork.player.KOTCPlayer
 import io.github.slaxnetwork.player.KOTCPlayerRegistry

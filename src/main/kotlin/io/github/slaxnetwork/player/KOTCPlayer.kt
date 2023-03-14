@@ -6,7 +6,7 @@ import io.github.slaxnetwork.events.crown.KOTCPlayerCrownLostEvent
 import io.github.slaxnetwork.events.crown.KOTCPlayerCrownObtainedEvent
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import java.util.UUID
+import java.util.*
 
 data class KOTCPlayer(
     val uuid: UUID
