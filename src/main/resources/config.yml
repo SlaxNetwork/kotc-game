@@ -15,13 +15,13 @@ games:
   skywars_rush:
     maps:
       test:
+        world: 'world'
         enabled: true
         center:
           x: 0.0
           y: 0.0
           z: 0.0
-          world: 'world'
-        border_radius: 100
+        border_radius: 100.0
         spawnpoints:
           0:
             x: 0.0
@@ -29,4 +29,3 @@ games:
             z: 0.0
             yaw: 0.0
             pitch: 0.0
-            world: 'world'
