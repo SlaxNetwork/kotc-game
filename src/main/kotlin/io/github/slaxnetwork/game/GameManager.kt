@@ -134,7 +134,8 @@ class GameManager(
      * Update the world's world border.
      */
     private fun updateWorldBorder(center: Location, size: Double) {
-        val world = Bukkit.getWorld("world") ?: throw NullPointerException("World is null @ updateWorldBorder")
+        val world = Bukkit.getWorld("world") 
+            ?: throw NullPointerException("world was not found.")
 
         world.worldBorder.center = center
         world.worldBorder.size = size
