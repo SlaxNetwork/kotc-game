@@ -36,10 +36,6 @@ data class KOTCPlayer(
             field = value
         }
 
-    var dead = false
-
-    var team: KOTCTeam = KOTCTeam.NONE
-
     fun addRubies(amount: Int) {
         rubies += amount
     }

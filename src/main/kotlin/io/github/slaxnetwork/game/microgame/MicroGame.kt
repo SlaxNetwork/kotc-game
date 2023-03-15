@@ -39,7 +39,7 @@ abstract class MicroGame(
 
     var winner: KOTCPlayer? = null
 
-    val players get() = playerRegistry.players.values
+    val kotcPlayers get() = playerRegistry.players.values
 
     private val gameListeners = mutableSetOf<Listener>()
 
