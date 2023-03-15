@@ -14,6 +14,7 @@ import io.github.slaxnetwork.listeners.kotc.KOTCPlayerCrownListeners
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
 import io.github.slaxnetwork.waitingroom.WaitingRoomManager
 import net.kyori.adventure.text.minimessage.MiniMessage
+import org.bukkit.configuration.file.YamlConfiguration
 
 class KOTCGame : SuspendingJavaPlugin() {
     lateinit var bukkitCore: BukkitCoreAPI

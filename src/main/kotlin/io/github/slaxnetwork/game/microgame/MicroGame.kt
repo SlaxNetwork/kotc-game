@@ -12,12 +12,13 @@ import java.util.function.Consumer
 
 abstract class MicroGame(
     val type: MicroGameType,
-    val map: MicroGameMap,
     val scheduler: BukkitScheduler,
     val playerRegistry: KOTCPlayerRegistry,
 
     private var preGameTimer: Int = 30
 ) {
+    abstract val map: MicroGameMap
+
     /**
      * Current state of the [MicroGame].
      */

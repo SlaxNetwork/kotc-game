@@ -7,7 +7,16 @@ class SkyWarsRushMap(
     id: String,
     mapSection: ConfigurationSection
 ): MicroGameMap(id, mapSection) {
-    override fun initialize() {
+    val chestDistances = ChestDistance(
+        spawn = mapSection.getDouble("chests.distance.spawn"),
+        center = mapSection.getDouble("chests.distance.center")
+    )
 
+    override fun initialize() {
     }
+
+    data class ChestDistance(
+        val spawn: Double,
+        val center: Double
+    )
 }

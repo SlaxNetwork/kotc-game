@@ -4,6 +4,7 @@ import io.github.slaxnetwork.events.KOTCPlayerDisconnectEvent
 import io.github.slaxnetwork.events.KOTCPlayerReconnectEvent
 import io.github.slaxnetwork.events.crown.KOTCPlayerCrownLostEvent
 import io.github.slaxnetwork.events.crown.KOTCPlayerCrownObtainedEvent
+import io.github.slaxnetwork.game.microgame.team.KOTCTeam
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.*
@@ -36,6 +37,8 @@ data class KOTCPlayer(
         }
 
     var dead = false
+
+    var team: KOTCTeam = KOTCTeam.NONE
 
     fun addRubies(amount: Int) {
         rubies += amount

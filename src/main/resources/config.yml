@@ -23,17 +23,87 @@ games:
         world: 'world'
         enabled: true
         center:
-          x: 0.0
-          y: 0.0
+          x: 100.0
+          y: 100.0
           z: 0.0
         border:
           radius: 100.0
           damage: 0.0
           damage_buffer: 0.0
+        chests:
+          distance:
+            spawn: 10.0
+            center: 5.0
         spawnpoints:
           0:
-            x: 0.0
-            y: 0.0
+            x: 120.0
+            y: 100.0
+            z: 0.0
+            yaw: 0.0
+            pitch: 0.0
+          1:
+            x: 120.0
+            y: 100.0
+            z: 0.0
+            yaw: 0.0
+            pitch: 0.0
+          2:
+            x: 120.0
+            y: 100.0
+            z: 0.0
+            yaw: 0.0
+            pitch: 0.0
+          3:
+            x: 120.0
+            y: 100.0
+            z: 0.0
+            yaw: 0.0
+            pitch: 0.0
+          4:
+            x: 120.0
+            y: 100.0
+            z: 0.0
+            yaw: 0.0
+            pitch: 0.0
+          5:
+            x: 120.0
+            y: 100.0
+            z: 0.0
+            yaw: 0.0
+            pitch: 0.0
+          6:
+            x: 120.0
+            y: 100.0
+            z: 0.0
+            yaw: 0.0
+            pitch: 0.0
+          7:
+            x: 120.0
+            y: 100.0
+            z: 0.0
+            yaw: 0.0
+            pitch: 0.0
+          8:
+            x: 120.0
+            y: 100.0
+            z: 0.0
+            yaw: 0.0
+            pitch: 0.0
+          9:
+            x: 120.0
+            y: 100.0
+            z: 0.0
+            yaw: 0.0
+            pitch: 0.0
+          10:
+            x: 120.0
+            y: 100.0
+            z: 0.0
+            yaw: 0.0
+            pitch: 0.0
+          11:
+            x: 120.0
+            y: 100.0
             z: 0.0
             yaw: 0.0
             pitch: 0.0

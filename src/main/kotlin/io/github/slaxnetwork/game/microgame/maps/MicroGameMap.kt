@@ -9,13 +9,13 @@ abstract class MicroGameMap(
     val id: String,
     private val mapSection: ConfigurationSection
 ) {
-    val spawnPoints: Set<Location> = getSpawnPointsFromConfig()
+    val spawnPoints: List<Location> = getSpawnPointsFromConfig()
 
     val center: Location = mapSection.getConfigurationSection("center")
         ?.toBukkitLocation()
         ?: throw IllegalArgumentException("Map $id doesn't have a center point set in config.")
 
-    private val world: World
+    val world: World
         get() = center.world
 
     open fun initialize() { }
@@ -41,7 +41,7 @@ abstract class MicroGameMap(
         val damage = borderSection.getDouble("damage")
         val damageBuffer = mapSection.getDouble("damage_buffer")
 
-        val worldBorder = world.worldBorder
+        val worldBorder = center.world.worldBorder
 
         worldBorder.center = center
         worldBorder.size = radius
@@ -65,11 +65,11 @@ abstract class MicroGameMap(
      * All valid spawn points from the configuration.
      * @return spawn locations.
      */
-    private fun getSpawnPointsFromConfig(): Set<Location> {
+    private fun getSpawnPointsFromConfig(): List<Location> {
         val spawnPointsSection = mapSection.getConfigurationSection("spawnpoints")
-            ?: return emptySet()
+            ?: return emptyList()
 
-        val locations = mutableSetOf<Location>()
+        val locations = mutableListOf<Location>()
 
         for(spawnPointId in spawnPointsSection.getKeys(false)) {
             val spawnPointLocation = spawnPointsSection.getConfigurationSection(spawnPointId)

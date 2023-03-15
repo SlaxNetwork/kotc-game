@@ -15,8 +15,6 @@ class KOTCPlayerRegistry {
     }
 
     fun remove(uuid: UUID) {
-        _players.removeIf {
-            it.uuid == uuid
-        }
+        _players.remove(players[uuid] ?: return)
     }
 }
