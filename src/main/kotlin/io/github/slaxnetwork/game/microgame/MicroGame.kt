@@ -13,7 +13,7 @@ import java.util.function.Consumer
 abstract class MicroGame(
     val type: MicroGameType,
     val scheduler: BukkitScheduler,
-    val playerRegistry: KOTCPlayerRegistry,
+    val kotcPlayerRegistry: KOTCPlayerRegistry,
 
     private var preGameTimer: Int = 30
 ) {
@@ -39,7 +39,7 @@ abstract class MicroGame(
 
     var winner: KOTCPlayer? = null
 
-    val kotcPlayers get() = playerRegistry.players.values
+    val kotcPlayers get() = kotcPlayerRegistry.players.values
 
     private val gameListeners = mutableSetOf<Listener>()
 

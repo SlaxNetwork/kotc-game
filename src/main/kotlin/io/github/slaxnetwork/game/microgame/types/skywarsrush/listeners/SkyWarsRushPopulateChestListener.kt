@@ -1,4 +1,4 @@
-package io.github.slaxnetwork.listeners.skywarsrush
+package io.github.slaxnetwork.game.microgame.types.skywarsrush.listeners
 
 import io.github.slaxnetwork.game.microgame.types.skywarsrush.SkyWarsRushMap
 import io.github.slaxnetwork.game.microgame.types.skywarsrush.SkyWarsRushMicroGame
@@ -61,7 +61,7 @@ class SkyWarsRushPopulateChestListener(
             if(blockLoc.distance(map.center) <= map.chestDistances.center) {
                 return ChestType.CENTER
             // 12 iters.
-            } else if(map.spawnPoints.any { blockLoc.distance(it) < map.chestDistances.spawn }) {
+            } else if(map.spawnPoints.any { blockLoc.distance(it.location) < map.chestDistances.spawn }) {
                 return ChestType.SPAWN
             }
 

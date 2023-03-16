@@ -1,4 +1,4 @@
-package io.github.slaxnetwork.listeners.skywarsrush
+package io.github.slaxnetwork.game.microgame.types.skywarsrush.listeners
 
 import io.github.slaxnetwork.game.microgame.types.skywarsrush.SkyWarsRushMicroGame
 import org.bukkit.Bukkit
@@ -9,7 +9,7 @@ import org.bukkit.event.entity.PlayerDeathEvent
 class SkyWarsRushPlayerDeathListener(
     private val skyWars: SkyWarsRushMicroGame
 ) : Listener {
-    private val playerRegistry get() = skyWars.playerRegistry
+    private val playerRegistry get() = skyWars.kotcPlayerRegistry
 
     @EventHandler
     fun onPlayerDeath(ev: PlayerDeathEvent) {
@@ -18,6 +18,6 @@ class SkyWarsRushPlayerDeathListener(
 
         Bukkit.broadcastMessage("${kotcPlayer.bukkitPlayer?.name} has died while in game.")
 
-        kotcPlayer.dead = true
+        skyWars.microGamePlayerRegistry.findByUUID(ev.player.uniqueId)?.dead = true
     }
 }

@@ -5,9 +5,9 @@ import io.github.slaxnetwork.game.microgame.MicroGame
 import io.github.slaxnetwork.game.microgame.MicroGameType
 import io.github.slaxnetwork.game.microgame.player.MicroGamePlayerRegistry
 import io.github.slaxnetwork.game.microgame.player.MicroGamePlayerRegistryHolder
-import io.github.slaxnetwork.game.microgame.team.KOTCTeam
-import io.github.slaxnetwork.listeners.skywarsrush.SkyWarsRushPopulateChestListener
-import io.github.slaxnetwork.listeners.skywarsrush.SkyWarsRushPlayerDeathListener
+import io.github.slaxnetwork.game.microgame.team.KOTCTeamUtils
+import io.github.slaxnetwork.game.microgame.types.skywarsrush.listeners.SkyWarsRushPopulateChestListener
+import io.github.slaxnetwork.game.microgame.types.skywarsrush.listeners.SkyWarsRushPlayerDeathListener
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
 import org.bukkit.plugin.PluginManager
 import org.bukkit.scheduler.BukkitScheduler
@@ -22,18 +22,11 @@ class SkyWarsRushMicroGame(
     override val microGamePlayerRegistry = MicroGamePlayerRegistry<SkyWarsRushPlayer>()
 
     override fun startPreGame() {
-        val teams = KOTCTeam.values()
-            .filter { it.valid }
-            .toMutableSet()
-
-        for(swPlayer in gamePlayers) {
-            val team = teams.shuffled()
-                .firstOrNull()
-                ?: KOTCTeam.NONE
-
-            swPlayer.team = team
-            teams.remove(team)
+        for(kotcPlayer in kotcPlayers) {
+            microGamePlayerRegistry.add(SkyWarsRushPlayer(kotcPlayer))
         }
+
+        KOTCTeamUtils.randomlyAssignToTeam(microGamePlayerRegistry.players)
     }
 
     override fun tickPreGameTimer() {
@@ -49,8 +42,10 @@ class SkyWarsRushMicroGame(
                 continue
             }
 
-            val spawnPoint = map.spawnPoints[swPlayer.team.ordinal - 1]
-            bukkitPlayer.teleport(spawnPoint)
+            val spawnPoint = map.getTeamSpawnPoints(swPlayer.team)
+                .first()
+
+            bukkitPlayer.teleport(spawnPoint.location.toCenterLocation())
         }
     }
 

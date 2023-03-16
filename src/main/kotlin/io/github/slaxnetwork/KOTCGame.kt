@@ -34,6 +34,7 @@ class KOTCGame : SuspendingJavaPlugin() {
 
     override suspend fun onEnableAsync() {
         saveResource("config.yml", true)
+        reloadConfig()
 
         bukkitCore = BukkitCoreAPI.get(server.servicesManager)
             ?: throw RuntimeException("bukkit-core was unable to be loaded.")

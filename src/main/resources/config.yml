@@ -34,76 +34,89 @@ games:
           distance:
             spawn: 10.0
             center: 5.0
-        spawnpoints:
-          0:
-            x: 120.0
-            y: 100.0
-            z: 0.0
-            yaw: 0.0
-            pitch: 0.0
-          1:
-            x: 120.0
-            y: 100.0
-            z: 0.0
-            yaw: 0.0
-            pitch: 0.0
-          2:
-            x: 120.0
-            y: 100.0
-            z: 0.0
-            yaw: 0.0
-            pitch: 0.0
-          3:
-            x: 120.0
-            y: 100.0
-            z: 0.0
-            yaw: 0.0
-            pitch: 0.0
-          4:
-            x: 120.0
-            y: 100.0
-            z: 0.0
-            yaw: 0.0
-            pitch: 0.0
-          5:
-            x: 120.0
-            y: 100.0
-            z: 0.0
-            yaw: 0.0
-            pitch: 0.0
-          6:
-            x: 120.0
-            y: 100.0
-            z: 0.0
-            yaw: 0.0
-            pitch: 0.0
-          7:
-            x: 120.0
-            y: 100.0
-            z: 0.0
-            yaw: 0.0
-            pitch: 0.0
-          8:
-            x: 120.0
-            y: 100.0
-            z: 0.0
-            yaw: 0.0
-            pitch: 0.0
-          9:
-            x: 120.0
-            y: 100.0
-            z: 0.0
-            yaw: 0.0
-            pitch: 0.0
-          10:
-            x: 120.0
-            y: 100.0
-            z: 0.0
-            yaw: 0.0
-            pitch: 0.0
-          11:
-            x: 120.0
-            y: 100.0
-            z: 0.0
-            yaw: 0.0
-            pitch: 0.0
+        spawn_points:
+          teams:
+            red:
+              0:
+                x: 136.5
+                y: 107.0
+                z: 0.5
+                yaw: 180
+                pitch: 0.0
+            orange:
+              0:
+                x: 136.5
+                y: 107.0
+                z: -20.5
+                yaw: 90.0
+                pitch: 0.0
+            yellow:
+              0:
+                x: 115.5
+                y: 107.0
+                z: -20.5
+                yaw: 0.0
+                pitch: 0.0
+            lime:
+              0:
+                x: 99.5
+                y: 107.0
+                z: -20.5
+                yaw: 0.0
+                pitch: 0.0
+            green:
+              0:
+                x: 78.5
+                y: 107.0
+                z: -20.5
+                yaw: 0.0
+                pitch: 0.0
+            light_blue:
+              0:
+                x: 78.5
+                y: 107.0
+                z: 16.5
+                yaw: 0.0
+                pitch: 0.0
+            dark_blue:
+              0:
+                x: 78.5
+                y: 107.0
+                z: 37.5
+                yaw: 0.0
+                pitch: 0.0
+            purple:
+              0:
+                x: 99.5
+                y: 107.0
+                z: 37.5
+                yaw: 0.0
+                pitch: 0.0
+            magenta:
+              0:
+                x: 115.5
+                y: 107.0
+                z: 37.5
+                yaw: 0.0
+                pitch: 0.0
+            pink:
+              0:
+                x: 136.5
+                y: 107.0
+                z: 37.5
+                yaw: 180.0
+                pitch: 0.0
+            gray:
+              0:
+                x: 136.5
+                y: 107.0
+                z: 16.5
+                yaw: 180.0
+                pitch: 0.0
+          all:
+            0:
+              x: 0.0
+              y: 0.0
+              z: 0.0
+              yaw: 0.0
+              pitch: 0.0

@@ -30,6 +30,7 @@ class PlayerDeathListener(
                 victim = kotcPlayerVictim,
                 killer = kotcPlayerKiller
             ))
+            return
         }
 
         Bukkit.getPluginManager().callEvent(KOTCCrownHolderDeathEvent(

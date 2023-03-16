@@ -8,11 +8,15 @@ class MicroGamePlayerRegistry <Player : MicroGamePlayer> {
     val players: Set<Player>
         get() = Collections.unmodifiableSet(_players)
 
-    val mappedPlayers: Map<UUID, Player>
-        get() = Collections.unmodifiableMap(_players.associateBy { it.kotcPlayer.uuid })
+    private val mappedPlayers: Map<UUID, Player>
+        get() = players.associateBy { it.kotcPlayer.uuid }
 
     fun add(player: Player): Player {
         _players.add(player)
         return player
+    }
+
+    fun findByUUID(uuid: UUID): Player? {
+        return mappedPlayers[uuid]
     }
 }
