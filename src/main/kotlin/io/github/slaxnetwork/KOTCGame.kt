@@ -34,6 +34,7 @@ class KOTCGame : SuspendingJavaPlugin() {
 
     override suspend fun onEnableAsync() {
         saveResource("config.yml", true)
+        saveResource("skywars/loot_table.yml", true)
         reloadConfig()
 
         bukkitCore = BukkitCoreAPI.get(server.servicesManager)

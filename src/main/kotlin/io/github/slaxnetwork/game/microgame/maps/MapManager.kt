@@ -20,6 +20,7 @@ class MapManager(
     /**
      * Initialize all game maps into memory without loading their instances.
      */
+    @Throws(NullPointerException::class)
     fun initialize() {
         for(microGameId in gamesSection.getKeys(false)) {
             val microGame = try {
@@ -59,6 +60,7 @@ class MapManager(
      * @param microGameType [MicroGameType] to use.
      * @param mapId map to load an instance of.
      */
+    @Throws(NullPointerException::class, IllegalArgumentException::class)
     fun loadMapInstance(
         microGameType: MicroGameType,
         mapId: String

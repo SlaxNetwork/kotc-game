@@ -13,7 +13,7 @@ import java.util.function.Consumer
 abstract class MicroGame(
     val type: MicroGameType,
     val scheduler: BukkitScheduler,
-    val kotcPlayerRegistry: KOTCPlayerRegistry,
+    private val kotcPlayerRegistry: KOTCPlayerRegistry,
 
     private var preGameTimer: Int = 30
 ) {

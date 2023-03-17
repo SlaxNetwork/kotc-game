@@ -1,16 +1,17 @@
 package io.github.slaxnetwork.game
 
+import io.github.slaxnetwork.KOTCGame
 import io.github.slaxnetwork.game.microgame.MicroGame
 import io.github.slaxnetwork.game.microgame.MicroGameState
 import io.github.slaxnetwork.game.microgame.MicroGameType
 import io.github.slaxnetwork.game.microgame.maps.MapManager
-import io.github.slaxnetwork.game.microgame.types.skywarsrush.SkyWarsRushMap
 import io.github.slaxnetwork.game.microgame.types.skywarsrush.SkyWarsRushMicroGame
 import io.github.slaxnetwork.player.KOTCPlayer
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
 import io.github.slaxnetwork.waitingroom.WaitingRoomManager
 import org.bukkit.plugin.PluginManager
 import org.bukkit.scheduler.BukkitScheduler
+import java.io.File
 
 class GameManager(
     val playerRegistry: KOTCPlayerRegistry,
@@ -73,15 +74,18 @@ class GameManager(
 
         val mapInstance = mapManager.loadMapInstance(microGameType, selectedMapId)
 
-        val microGameInstance = when(microGameType) {
-            MicroGameType.SKYWARS_RUSH -> {
-                if(mapInstance !is SkyWarsRushMap)
-                    throw IllegalStateException("mapInstance must be a SkyWarsRushMap.")
+        val microGameInstance = try {
+            when(microGameType) {
+                MicroGameType.SKYWARS_RUSH -> {
+                    val lootTableFile = File(KOTCGame.get().dataFolder, "skywars/loot_table.yml")
 
-                SkyWarsRushMicroGame(mapInstance, scheduler, playerRegistry)
+                    SkyWarsRushMicroGame.create(mapInstance, scheduler, playerRegistry, lootTableFile)
+                }
+                else -> throw IllegalStateException("$microGameType is not a supported micro game.")
             }
-
-            else -> throw IllegalStateException("$microGameType is not a supported micro game.")
+        } catch(ex: Exception) {
+            ex.printStackTrace()
+            return
         }
 
         // micro game initialization

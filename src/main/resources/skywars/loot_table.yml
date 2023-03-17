@@ -1,0 +1,12 @@
+chests:
+  spawn:
+    sorted: true
+    0:
+
+  middle:
+    sorted: false
+    0:
+  center:
+    sorted: false
+    drops:
+      0:

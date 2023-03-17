@@ -1,6 +1,5 @@
 package io.github.slaxnetwork.game.microgame.maps
 
-import io.github.slaxnetwork.KOTCLogger
 import io.github.slaxnetwork.game.microgame.team.KOTCTeam
 import io.github.slaxnetwork.utils.toBukkitLocation
 import org.bukkit.Location
@@ -31,6 +30,7 @@ abstract class MicroGameMap(
     /**
      * Set the map world border.
      */
+    @Throws(IllegalArgumentException::class)
     fun setupWorldBorder() {
         val borderSection = mapSection.getConfigurationSection("border")
             ?: throw NullPointerException("section border for $id isn't set.")
@@ -71,6 +71,7 @@ abstract class MicroGameMap(
      * All valid spawn points from the configuration.
      * @return spawn locations.
      */
+    @Throws(IllegalStateException::class)
     private fun getSpawnPointsFromConfig(): List<MapSpawnPoint> {
         fun getSpawnPointLocations(section: ConfigurationSection): List<Location> {
             return section.getKeys(false)
