@@ -4,6 +4,7 @@
 package io.github.slaxnetwork.config
 
 import io.github.slaxnetwork.KOTCGame
+import io.github.slaxnetwork.config.types.Config
 import io.github.slaxnetwork.config.types.WaitingRoomConfig
 import io.github.slaxnetwork.config.types.game.SkyWarsRushConfig
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -15,6 +16,7 @@ import java.util.*
 import kotlin.properties.ReadOnlyProperty
 
 private val RESOURCES = setOf(
+    Pair("config.json", Config::class),
     Pair("waiting_room.json", WaitingRoomConfig::class),
     Pair("skywars.json", SkyWarsRushConfig::class)
 )
@@ -23,6 +25,10 @@ private val configurationContainer = mutableMapOf<Any, Any>()
 val CONFIGURATION_CONTAINER: Map<Any, Any>
     get() = Collections.unmodifiableMap(configurationContainer)
 
+/**
+ * Load all configurations in resources.
+ * @param plugin Instance to [KOTCGame].
+ */
 @OptIn(ExperimentalSerializationApi::class)
 fun loadInjectableResources(plugin: KOTCGame) {
     for((resourcePath, kClass) in RESOURCES) {
@@ -43,6 +49,12 @@ fun loadInjectableResources(plugin: KOTCGame) {
     }
 }
 
-inline fun <reified T> injectConfig() = ReadOnlyProperty<Any?, T> { _, _ ->
-    CONFIGURATION_CONTAINER[T::class] as T
+/**
+ * Inject a configuration by its type
+ * @param Config Type of Configuration to inject.
+ */
+inline fun <reified Config> injectConfig() = ReadOnlyProperty<Any?, Config> { _, _ ->
+    val conf = CONFIGURATION_CONTAINER[Config::class] as Config
+        ?: throw NullPointerException("no configuration ${Config::class.simpleName} was found in the configuration container.")
+    conf
 }

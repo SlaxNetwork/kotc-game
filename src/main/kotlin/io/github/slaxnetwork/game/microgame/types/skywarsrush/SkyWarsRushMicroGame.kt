@@ -15,25 +15,26 @@ import org.bukkit.scheduler.BukkitScheduler
 class SkyWarsRushMicroGame(
     override val map: SkyWarsRushMap,
     scheduler: BukkitScheduler,
-    playerRegistry: KOTCPlayerRegistry
-) : MicroGame(type = MicroGameType.SKYWARS_RUSH, scheduler, playerRegistry, preGameTimer = 1),
+    kotcPlayerRegistry: KOTCPlayerRegistry
+) : MicroGame(type = MicroGameType.SKYWARS_RUSH, scheduler, kotcPlayerRegistry, preGameTimer = 1),
     MicroGamePlayerRegistryHolder<SkyWarsRushPlayer>
 {
     override val microGamePlayerRegistry = MicroGamePlayerRegistry<SkyWarsRushPlayer>()
 
-    override fun startPreGame() {
+    override fun initialize() {
         for(kotcPlayer in kotcPlayers) {
             microGamePlayerRegistry.add(SkyWarsRushPlayer(kotcPlayer))
         }
 
-        KOTCTeamUtils.randomlyAssignToTeam(microGamePlayerRegistry.players)
+        KOTCTeamUtils.randomlyAssignToTeam(gamePlayers)
     }
 
-    override fun tickPreGameTimer() {
-    }
+    override fun startPreGame() { }
+
+    override fun tickPreGameTimer() { }
 
     override fun startGame() {
-        for(swPlayer in gamePlayers.filter { it.connected }) {
+        for(swPlayer in connectedGamePlayers) {
             val bukkitPlayer = swPlayer.bukkitPlayer
                 ?: continue
 
@@ -45,8 +46,7 @@ class SkyWarsRushMicroGame(
         }
     }
 
-    override fun endGame() {
-    }
+    override fun endGame() { }
 
     override fun initializeListeners(pluginManager: PluginManager) {
         registerListeners(

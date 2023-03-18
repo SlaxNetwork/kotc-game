@@ -1,5 +1,6 @@
 package io.github.slaxnetwork.game.microgame.types.skywarsrush.listeners
 
+import io.github.slaxnetwork.KOTCLogger
 import io.github.slaxnetwork.config.injectConfig
 import io.github.slaxnetwork.config.model.skywars.ConfigSkyWarsLootTableModel
 import io.github.slaxnetwork.config.types.game.ConfigSkyWarsMapModel
@@ -123,11 +124,18 @@ class SkyWarsRushPopulateChestListener(
         return ChestType.MIDDLE
     }
 
+    @Throws(IllegalArgumentException::class)
     private fun getDropsFromTable(
         dropTable: ConfigSkyWarsLootTableModel.DropTable
     ): MutableList<ConfigSkyWarsLootTableModel.Drop> {
         val (min, max) = dropTable.amount
         val dropAmount = (min..max).random()
+
+        KOTCLogger.debug("drops", "minimum = $min, maximum = $max, dropAmt = $dropAmount")
+
+        if(dropTable.drops.size < dropAmount) {
+            throw IllegalArgumentException("cannot populate with $dropAmount drops with a maximum drop count of ${dropTable.drops.size}")
+        }
 
         val drops = mutableSetOf<ConfigSkyWarsLootTableModel.Drop>()
 

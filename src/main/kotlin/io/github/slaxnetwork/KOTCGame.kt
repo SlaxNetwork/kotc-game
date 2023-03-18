@@ -32,9 +32,11 @@ class KOTCGame : SuspendingJavaPlugin() {
     lateinit var waitingRoomManager: WaitingRoomManager
         private set
 
-    override suspend fun onEnableAsync() {
+    override suspend fun onLoadAsync() {
         loadInjectableResources(this)
+    }
 
+    override suspend fun onEnableAsync() {
         bukkitCore = BukkitCoreAPI.get(server.servicesManager)
             ?: throw RuntimeException("bukkit-core was unable to be loaded.")
 
@@ -52,6 +54,10 @@ class KOTCGame : SuspendingJavaPlugin() {
 
         registerCommands()
         registerListeners()
+    }
+
+    override suspend fun onDisableAsync() {
+
     }
 
     private fun registerCommands() {

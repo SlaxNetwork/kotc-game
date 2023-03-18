@@ -3,11 +3,11 @@
     "spawn": {
       "sorted": true,
       "drop_amount": {
-        "min": 1,
+        "min": 3,
         "max": 3
       },
       "drops": [
-        { "material": "DIAMOND_SWORD", "amount": 1, "chance": 1.0 },
+        { "material": "WHITE_CONCRETE", "amount": 1, "chance": 1.0 },
         { "material": "STONE_SWORD", "amount": 1, "chance": 25.0 },
         { "material": "GOLDEN_SWORD", "amount": 1, "chance": 8.0 }
       ]

@@ -17,8 +17,6 @@ class TestRunCommand(
     ): Boolean {
         inst.gameManager.startMicroGame(MicroGameType.SKYWARS_RUSH)
 
-        inst.logger.info(inst.gameManager.isRunningMicroGame.toString())
-
         return true
     }
 }

@@ -9,7 +9,4 @@ class SkyWarsRushMap(
 ): MicroGameMap(id, mapConfig) {
     val chestDistances: ConfigSkyWarsMapModel.ChestDistance
         get() = mapConfig.chestDistance
-
-    override fun initialize() {
-    }
 }

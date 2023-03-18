@@ -12,7 +12,7 @@ import org.bukkit.plugin.PluginManager
 import org.bukkit.scheduler.BukkitScheduler
 
 class GameManager(
-    val playerRegistry: KOTCPlayerRegistry,
+    private val kotcPlayerRegistry: KOTCPlayerRegistry,
     private val waitingRoomManager: WaitingRoomManager,
     private val mapManager: MapManager,
     private val scheduler: BukkitScheduler,
@@ -55,7 +55,7 @@ class GameManager(
      * Current player holding the crown.
      */
     val currentCrownHolder: KOTCPlayer?
-        get() = playerRegistry.players.values.firstOrNull { it.crownHolder }
+        get() = kotcPlayerRegistry.players.values.firstOrNull { it.crownHolder }
 
     /**
      * Start a [MicroGame].
@@ -74,7 +74,7 @@ class GameManager(
 
         val microGameInstance = try {
             when(microGameType) {
-                MicroGameType.SKYWARS_RUSH -> SkyWarsRushMicroGame.create(mapInstance, scheduler, playerRegistry)
+                MicroGameType.SKYWARS_RUSH -> SkyWarsRushMicroGame.create(mapInstance, scheduler, kotcPlayerRegistry)
                 else -> throw IllegalStateException("$microGameType is not a supported micro game.")
             }
         } catch(ex: Exception) {
@@ -130,7 +130,7 @@ class GameManager(
      * Randomly assign the crown to a player.
      */
     private fun randomlyAssignCrown() {
-        val kotcPlayer = playerRegistry.players.values
+        val kotcPlayer = kotcPlayerRegistry.players.values
             .filter { it.connected && !it.crownHolder }
             .randomOrNull()
 

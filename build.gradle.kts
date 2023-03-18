@@ -18,7 +18,7 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
 
-    compileOnly("io.github.slaxnetwork:bukkit-core:0.0.1")
+    compileOnly("io.github.slaxnetwork:bukkit-core-api:0.0.1")
     compileOnly("io.github.slaxnetwork:kyouko-wrapper:0.0.1")
 
     implementation("me.tech:chestuiplus:1.0.0")

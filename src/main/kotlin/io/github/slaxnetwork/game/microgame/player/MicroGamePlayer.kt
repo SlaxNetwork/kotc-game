@@ -4,6 +4,10 @@ import io.github.slaxnetwork.game.microgame.team.KOTCTeam
 import io.github.slaxnetwork.player.KOTCPlayer
 import org.bukkit.entity.Player
 
+/**
+ * An abstract class to hold game-specific data that doesn't fit on the [KOTCPlayer].
+ * @param kotcPlayer Reference to the [KOTCPlayer]
+ */
 abstract class MicroGamePlayer(
     val kotcPlayer: KOTCPlayer
 ) {

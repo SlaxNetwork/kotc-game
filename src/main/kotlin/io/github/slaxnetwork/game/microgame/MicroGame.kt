@@ -2,8 +2,10 @@ package io.github.slaxnetwork.game.microgame
 
 import io.github.slaxnetwork.KOTCGame
 import io.github.slaxnetwork.game.microgame.maps.MicroGameMap
+import io.github.slaxnetwork.game.microgame.player.MicroGamePlayerRegistryHolder
 import io.github.slaxnetwork.player.KOTCPlayer
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
+import net.kyori.adventure.audience.Audience
 import org.bukkit.event.HandlerList
 import org.bukkit.event.Listener
 import org.bukkit.plugin.PluginManager
@@ -13,7 +15,7 @@ import java.util.function.Consumer
 abstract class MicroGame(
     val type: MicroGameType,
     val scheduler: BukkitScheduler,
-    val kotcPlayerRegistry: KOTCPlayerRegistry,
+    private val kotcPlayerRegistry: KOTCPlayerRegistry,
 
     private var preGameTimer: Int = 30
 ) {
@@ -43,6 +45,14 @@ abstract class MicroGame(
 
     private val gameListeners = mutableSetOf<Listener>()
 
+    /**
+     * Actions ran to initialize the [MicroGame].
+     */
+    open fun initialize() { }
+
+    /**
+     * Actions ran at the start of the pre-game.
+     */
     abstract fun startPreGame()
 
     /**
@@ -70,8 +80,14 @@ abstract class MicroGame(
      */
     abstract fun tickPreGameTimer()
 
+    /**
+     * Actions ran once the game has started.
+     */
     abstract fun startGame()
 
+    /**
+     * Actions ran once the game has ended.
+     */
     abstract fun endGame()
 
     /**
