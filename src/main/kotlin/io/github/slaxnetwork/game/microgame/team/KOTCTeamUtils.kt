@@ -1,5 +1,6 @@
 package io.github.slaxnetwork.game.microgame.team
 
+import io.github.slaxnetwork.KOTCLogger
 import io.github.slaxnetwork.game.microgame.player.MicroGamePlayer
 
 object KOTCTeamUtils {
@@ -15,6 +16,7 @@ object KOTCTeamUtils {
                 ?: throw NullPointerException("no valid team was able to be assigned.")
 
             mgPlayer.team = team
+            KOTCLogger.info(team.toString())
             teams.remove(team)
         }
     }
