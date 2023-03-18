@@ -83,8 +83,8 @@ class SkyWarsRushPopulateChestListener(
         if(chestType == ChestType.SPAWN || chestType == ChestType.SPAWN_OTHER) {
             // TODO: 3/17/2023 cleanup pls
             for((index, drop) in drops.withIndex()) {
-                if(drop.materialName.equals("WHITE_CONRETE", true)) {
-                    drops[index] = ConfigSkyWarsLootTableModel.Drop(teamToWoolMap[swPlayer.team]?.name ?: "WHITE_CONRETE", drop.amount, drop.chance)
+                if(drop.materialName.equals("WHITE_CONCRETE", true)) {
+                    drops[index] = ConfigSkyWarsLootTableModel.Drop(teamToWoolMap[swPlayer.team]?.name ?: "WHITE_CONCRETE", drop.amount, drop.chance)
                 }
             }
         }
