@@ -1,6 +1,5 @@
 package io.github.slaxnetwork.game
 
-import io.github.slaxnetwork.KOTCGame
 import io.github.slaxnetwork.game.microgame.MicroGame
 import io.github.slaxnetwork.game.microgame.MicroGameState
 import io.github.slaxnetwork.game.microgame.MicroGameType
@@ -11,7 +10,6 @@ import io.github.slaxnetwork.player.KOTCPlayerRegistry
 import io.github.slaxnetwork.waitingroom.WaitingRoomManager
 import org.bukkit.plugin.PluginManager
 import org.bukkit.scheduler.BukkitScheduler
-import java.io.File
 
 class GameManager(
     val playerRegistry: KOTCPlayerRegistry,
@@ -76,11 +74,7 @@ class GameManager(
 
         val microGameInstance = try {
             when(microGameType) {
-                MicroGameType.SKYWARS_RUSH -> {
-                    val lootTableFile = File(KOTCGame.get().dataFolder, "skywars/loot_table.yml")
-
-                    SkyWarsRushMicroGame.create(mapInstance, scheduler, playerRegistry, lootTableFile)
-                }
+                MicroGameType.SKYWARS_RUSH -> SkyWarsRushMicroGame.create(mapInstance, scheduler, playerRegistry)
                 else -> throw IllegalStateException("$microGameType is not a supported micro game.")
             }
         } catch(ex: Exception) {
@@ -91,8 +85,9 @@ class GameManager(
         // micro game initialization
         currentMicroGame = microGameInstance
 
-        microGameInstance.map.initialize()
-        microGameInstance.map.setupWorldBorder()
+        mapInstance.initializeSpawnPoints()
+        mapInstance.initialize()
+        mapInstance.setupWorldBorder()
         microGameInstance.initializeListeners(pluginManager)
 
         microGameInstance.state = MicroGameState.IN_PRE_GAME
@@ -137,8 +132,7 @@ class GameManager(
     private fun randomlyAssignCrown() {
         val kotcPlayer = playerRegistry.players.values
             .filter { it.connected && !it.crownHolder }
-            .shuffled()
-            .firstOrNull()
+            .randomOrNull()
 
         kotcPlayer?.crownHolder = true
     }

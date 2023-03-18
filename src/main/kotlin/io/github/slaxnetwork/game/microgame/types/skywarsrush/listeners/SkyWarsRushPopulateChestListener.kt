@@ -1,11 +1,14 @@
 package io.github.slaxnetwork.game.microgame.types.skywarsrush.listeners
 
-import io.github.slaxnetwork.KOTCLogger
+import io.github.slaxnetwork.config.injectConfig
+import io.github.slaxnetwork.config.model.skywars.ConfigSkyWarsLootTableModel
+import io.github.slaxnetwork.config.types.game.ConfigSkyWarsMapModel
+import io.github.slaxnetwork.config.types.game.SkyWarsRushConfig
 import io.github.slaxnetwork.game.microgame.team.KOTCTeam
 import io.github.slaxnetwork.game.microgame.types.skywarsrush.SkyWarsRushMap
 import io.github.slaxnetwork.game.microgame.types.skywarsrush.SkyWarsRushMicroGame
 import io.github.slaxnetwork.game.microgame.types.skywarsrush.SkyWarsRushPlayer
-import io.github.slaxnetwork.game.microgame.types.skywarsrush.loottable.SkyWarsRushLootTable
+import io.github.slaxnetwork.utils.getRandomEmptySlot
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Block
@@ -19,25 +22,15 @@ import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 
 class SkyWarsRushPopulateChestListener(
-    private val skyWars: SkyWarsRushMicroGame,
-    private val lootTable: SkyWarsRushLootTable
+    private val skyWars: SkyWarsRushMicroGame
 ) : Listener {
-    // TODO: 3/14/2023 add loot table stuff
-    private val containerItems = mapOf(
-        ChestType.SPAWN to setOf(
-            ItemStack(Material.STONE_SWORD, 1),
-            ItemStack(Material.CHAINMAIL_LEGGINGS, 1),
-            ItemStack(Material.WHITE_CONCRETE, 64)
-        ),
+    private val skyWarsConfig by injectConfig<SkyWarsRushConfig>()
 
-        ChestType.MIDDLE to setOf(
-            ItemStack(Material.DIRT)
-        ),
+    private val lootTable: ConfigSkyWarsLootTableModel
+        get() = skyWarsConfig.lootTable
 
-        ChestType.CENTER to setOf(
-            ItemStack(Material.DIAMOND_AXE)
-        )
-    )
+    private val chestDistance: ConfigSkyWarsMapModel.ChestDistance
+        get() = skyWars.map.chestDistances
 
     private val teamToWoolMap = mapOf(
         KOTCTeam.RED to Material.RED_CONCRETE,
@@ -79,38 +72,75 @@ class SkyWarsRushPopulateChestListener(
     }
 
     private fun populateChest(swPlayer: SkyWarsRushPlayer, block: Block) {
-        fun determineChestType(): ChestType {
-            val blockLoc = block.location
-
-            if(blockLoc.distance(map.center) <= map.chestDistances.center) {
-                return ChestType.CENTER
-            // 12 iters.
-            } else if(map.spawnPoints.any { blockLoc.distance(it.location) < map.chestDistances.spawn }) {
-                return ChestType.SPAWN
-            }
-
-            // it's probably a middle chest otherwise.
-            return ChestType.MIDDLE
-        }
-
-        val containerInventory = (block.state as? InventoryHolder)?.inventory
+        val containerInventory = (block.state as? InventoryHolder)
+            ?.inventory
             ?: return
 
-        when(determineChestType()) {
-            // TODO: 3/14/2023 cleanup
-            ChestType.SPAWN -> containerItems[ChestType.SPAWN]?.forEach {
-                KOTCLogger.info(swPlayer.team.toString())
-                if(it.type == Material.WHITE_CONCRETE) {
-                    containerInventory.addItem(ItemStack(teamToWoolMap[swPlayer.team] ?: Material.WHITE_CONCRETE, 64))
-                } else {
-                    containerInventory.addItem(it)
+        val chestType = getChestType(swPlayer.team, block.location)
+        val dropTable = chestType.toDropTable(lootTable)
+
+        val drops = getDropsFromTable(dropTable)
+        if(chestType == ChestType.SPAWN || chestType == ChestType.SPAWN_OTHER) {
+            // TODO: 3/17/2023 cleanup pls
+            for((index, drop) in drops.withIndex()) {
+                if(drop.materialName.equals("WHITE_CONRETE", true)) {
+                    drops[index] = ConfigSkyWarsLootTableModel.Drop(teamToWoolMap[swPlayer.team]?.name ?: "WHITE_CONRETE", drop.amount, drop.chance)
                 }
             }
-            ChestType.MIDDLE -> containerItems[ChestType.MIDDLE]?.forEach { containerInventory.addItem(it) }
-            ChestType.CENTER -> containerItems[ChestType.CENTER]?.forEach { containerInventory.addItem(it) }
         }
 
-        invalidChests.add(block.location)
+        for(drop in drops) {
+            val material = Material.valueOf(drop.materialName)
+
+            if(dropTable.sorted) {
+                containerInventory.addItem(ItemStack(material, drop.amount))
+            } else {
+                containerInventory.setItem(containerInventory.getRandomEmptySlot(), ItemStack(material, drop.amount))
+            }
+        }
+    }
+
+    private fun getChestType(team: KOTCTeam, blockLocation: Location): ChestType {
+        if(blockLocation.distance(map.center) <= chestDistance.center) {
+            return ChestType.CENTER
+        }
+
+        for((kotcTeam, locations) in map.teamSpawnPoints) {
+            val spawnPoint = locations.firstOrNull()
+                ?: continue
+
+            if(blockLocation.distance(spawnPoint) <= chestDistance.spawn) {
+                return if(kotcTeam == team) {
+                    ChestType.SPAWN
+                } else {
+                    ChestType.SPAWN_OTHER
+                }
+            }
+        }
+
+        return ChestType.MIDDLE
+    }
+
+    private fun getDropsFromTable(
+        dropTable: ConfigSkyWarsLootTableModel.DropTable
+    ): MutableList<ConfigSkyWarsLootTableModel.Drop> {
+        val (min, max) = dropTable.amount
+        val dropAmount = (min..max).random()
+
+        val drops = mutableSetOf<ConfigSkyWarsLootTableModel.Drop>()
+
+        do {
+            val drop = dropTable.drops.filter { !drops.contains(it) }
+                .randomOrNull()
+                ?: break
+
+            val randomNum = (0..100).random()
+            if(randomNum <= drop.chance) {
+                drops.add(drop)
+            }
+        } while(drops.size != dropAmount)
+
+        return drops.toMutableList()
     }
 
     @EventHandler
@@ -137,6 +167,16 @@ class SkyWarsRushPopulateChestListener(
     private enum class ChestType {
         CENTER,
         MIDDLE,
-        SPAWN
+        SPAWN_OTHER,
+        SPAWN;
+
+        fun toDropTable(table: ConfigSkyWarsLootTableModel): ConfigSkyWarsLootTableModel.DropTable {
+            return when(this) {
+                SPAWN -> table.spawn
+                SPAWN_OTHER -> table.spawnOther
+                MIDDLE -> table.middle
+                CENTER -> table.center
+            }
+        }
     }
 }

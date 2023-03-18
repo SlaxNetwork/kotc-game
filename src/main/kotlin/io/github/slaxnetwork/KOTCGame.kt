@@ -4,6 +4,7 @@ import com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin
 import io.github.slaxnetwork.bukkitcore.BukkitCoreAPI
 import io.github.slaxnetwork.commands.EndGameCommand
 import io.github.slaxnetwork.commands.TestRunCommand
+import io.github.slaxnetwork.config.loadInjectableResources
 import io.github.slaxnetwork.game.GameManager
 import io.github.slaxnetwork.game.microgame.maps.MapManager
 import io.github.slaxnetwork.listeners.PlayerDeathListener
@@ -14,7 +15,6 @@ import io.github.slaxnetwork.listeners.kotc.KOTCPlayerCrownListeners
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
 import io.github.slaxnetwork.waitingroom.WaitingRoomManager
 import net.kyori.adventure.text.minimessage.MiniMessage
-import org.bukkit.configuration.file.YamlConfiguration
 
 class KOTCGame : SuspendingJavaPlugin() {
     lateinit var bukkitCore: BukkitCoreAPI
@@ -33,9 +33,7 @@ class KOTCGame : SuspendingJavaPlugin() {
         private set
 
     override suspend fun onEnableAsync() {
-        saveResource("config.yml", true)
-        saveResource("skywars/loot_table.yml", true)
-        reloadConfig()
+        loadInjectableResources(this)
 
         bukkitCore = BukkitCoreAPI.get(server.servicesManager)
             ?: throw RuntimeException("bukkit-core was unable to be loaded.")
@@ -45,10 +43,10 @@ class KOTCGame : SuspendingJavaPlugin() {
 
         playerRegistry = KOTCPlayerRegistry()
 
-        mapManager = MapManager(config.getConfigurationSection("games") ?: throw NullPointerException("games section doesn't exist."))
+        mapManager = MapManager()
         mapManager.initialize()
 
-        waitingRoomManager = WaitingRoomManager(config.getConfigurationSection("waiting_room") ?: throw NullPointerException(), playerRegistry, bukkitCore.profileRegistry)
+        waitingRoomManager = WaitingRoomManager(playerRegistry, bukkitCore.profileRegistry)
 
         gameManager = GameManager(playerRegistry, waitingRoomManager, mapManager, server.scheduler, server.pluginManager)
 

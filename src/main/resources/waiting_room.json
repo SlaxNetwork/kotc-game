@@ -1,0 +1,13 @@
+{
+  "world": "world",
+  "spawn_point": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "border": {
+    "radius": 200.0,
+    "damage": 0.0,
+    "damage_buffer": 0.0
+  }
+}
