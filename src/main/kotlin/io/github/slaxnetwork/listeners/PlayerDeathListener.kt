@@ -8,14 +8,14 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.PlayerDeathEvent
 
 class PlayerDeathListener(
-    private val playerRegistry: KOTCPlayerRegistry
+    private val kotcPlayerRegistry: KOTCPlayerRegistry
 ) : Listener {
     @EventHandler
     fun onPlayerDeath(ev: PlayerDeathEvent) {
         val victim = ev.player
         val killer = ev.player.killer
 
-        val kotcPlayerVictim = playerRegistry.players[victim.uniqueId]
+        val kotcPlayerVictim = kotcPlayerRegistry.findByUUID(victim.uniqueId)
             ?: return
 
         if(!kotcPlayerVictim.crownHolder) {
@@ -23,7 +23,7 @@ class PlayerDeathListener(
         }
 
         if(killer != null) {
-            val kotcPlayerKiller = playerRegistry.players[killer.uniqueId]
+            val kotcPlayerKiller = kotcPlayerRegistry.findByUUID(killer.uniqueId)
                 ?: return
 
             Bukkit.getPluginManager().callEvent(KOTCCrownHolderDeathEvent(

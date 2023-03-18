@@ -48,7 +48,7 @@ class KOTCPlayerConnectionListeners(
         }
         kotcPlayer.crownHolder = false
 
-        val bukkitPlayers = playerRegistry.players.values
+        val bukkitPlayers = playerRegistry.players
             .mapNotNull { it.bukkitPlayer }
 
         for(bukkitPlayer in bukkitPlayers) {

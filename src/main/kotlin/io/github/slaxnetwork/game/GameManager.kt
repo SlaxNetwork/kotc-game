@@ -55,7 +55,7 @@ class GameManager(
      * Current player holding the crown.
      */
     val currentCrownHolder: KOTCPlayer?
-        get() = kotcPlayerRegistry.players.values.firstOrNull { it.crownHolder }
+        get() = kotcPlayerRegistry.players.firstOrNull { it.crownHolder }
 
     /**
      * Start a [MicroGame].
@@ -130,7 +130,7 @@ class GameManager(
      * Randomly assign the crown to a player.
      */
     private fun randomlyAssignCrown() {
-        val kotcPlayer = kotcPlayerRegistry.players.values
+        val kotcPlayer = kotcPlayerRegistry.players
             .filter { it.connected && !it.crownHolder }
             .randomOrNull()
 

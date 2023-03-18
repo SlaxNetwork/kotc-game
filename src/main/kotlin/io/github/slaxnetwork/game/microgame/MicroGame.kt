@@ -10,6 +10,7 @@ import org.bukkit.event.HandlerList
 import org.bukkit.event.Listener
 import org.bukkit.plugin.PluginManager
 import org.bukkit.scheduler.BukkitScheduler
+import java.util.UUID
 import java.util.function.Consumer
 
 abstract class MicroGame(
@@ -41,7 +42,7 @@ abstract class MicroGame(
 
     var winner: KOTCPlayer? = null
 
-    val kotcPlayers get() = kotcPlayerRegistry.players.values
+    val kotcPlayers get() = kotcPlayerRegistry.players
 
     private val gameListeners = mutableSetOf<Listener>()
 
@@ -94,6 +95,10 @@ abstract class MicroGame(
      * Initialize all [Listener] related to a [MicroGame]
      */
     abstract fun initializeListeners(pluginManager: PluginManager)
+
+    fun findKOTCPlayerByUUID(uuid: UUID): KOTCPlayer? {
+        return kotcPlayerRegistry.findByUUID(uuid)
+    }
 
     /**
      * Register the set of [Listener].

@@ -4,8 +4,8 @@ import java.util.*
 
 class KOTCPlayerRegistry {
     private val _players = mutableSetOf<KOTCPlayer>()
-    val players: Map<UUID, KOTCPlayer>
-        get() = Collections.unmodifiableMap(_players.associateBy { it.uuid })
+    val players: Set<KOTCPlayer>
+        get() = Collections.unmodifiableSet(_players)
 
     fun add(uuid: UUID): KOTCPlayer {
         val kotcPlayer = KOTCPlayer(uuid)
@@ -15,6 +15,10 @@ class KOTCPlayerRegistry {
     }
 
     fun remove(uuid: UUID) {
-        _players.remove(players[uuid] ?: return)
+        _players.remove(findByUUID(uuid) ?: return)
+    }
+
+    fun findByUUID(uuid: UUID): KOTCPlayer? {
+        return players.firstOrNull { it.uuid == uuid }
     }
 }

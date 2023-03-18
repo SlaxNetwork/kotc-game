@@ -9,14 +9,15 @@ import org.bukkit.event.entity.PlayerDeathEvent
 class SkyWarsRushPlayerDeathListener(
     private val skyWars: SkyWarsRushMicroGame
 ) : Listener {
-    private val playerRegistry get() = skyWars.kotcPlayerRegistry
+    private val kotcPlayers get() = skyWars.kotcPlayers
 
     @EventHandler
     fun onPlayerDeath(ev: PlayerDeathEvent) {
-        val kotcPlayer = playerRegistry.players[ev.player.uniqueId]
-            ?: return
 
-        Bukkit.broadcastMessage("${kotcPlayer.bukkitPlayer?.name} has died while in game.")
+//        val kotcPlayer = kotcPlayers.players[ev.player.uniqueId]
+//            ?: return
+
+//        Bukkit.broadcastMessage("${kotcPlayer.bukkitPlayer?.name} has died while in game.")
 
         skyWars.microGamePlayerRegistry.findByUUID(ev.player.uniqueId)?.dead = true
     }

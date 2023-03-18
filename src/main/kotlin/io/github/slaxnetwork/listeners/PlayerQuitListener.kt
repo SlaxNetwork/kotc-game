@@ -7,18 +7,18 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerQuitEvent
 
 class PlayerQuitListener(
-    private val playerRegistry: KOTCPlayerRegistry,
+    private val kotcPlayerRegistry: KOTCPlayerRegistry,
     private val gameManager: GameManager
 ) : Listener {
     @EventHandler
     fun onPlayerQuit(ev: PlayerQuitEvent) {
         val uuid = ev.player.uniqueId
 
-        val kotcPlayer = playerRegistry.players[uuid]
+        val kotcPlayer = kotcPlayerRegistry.findByUUID(uuid)
             ?: return
 
         if(!gameManager.hasGameStarted) {
-            playerRegistry.remove(uuid)
+            kotcPlayerRegistry.remove(uuid)
             return
         }
 

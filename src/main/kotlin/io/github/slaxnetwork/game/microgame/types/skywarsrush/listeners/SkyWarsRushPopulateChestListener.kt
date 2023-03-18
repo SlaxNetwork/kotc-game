@@ -131,7 +131,7 @@ class SkyWarsRushPopulateChestListener(
         val (min, max) = dropTable.amount
         val dropAmount = (min..max).random()
 
-        KOTCLogger.debug("drops", "minimum = $min, maximum = $max, dropAmt = $dropAmount")
+        KOTCLogger.debug("sw-populate", "minimum = $min, maximum = $max, dropAmt = $dropAmount")
 
         if(dropTable.drops.size < dropAmount) {
             throw IllegalArgumentException("cannot populate with $dropAmount drops with a maximum drop count of ${dropTable.drops.size}")

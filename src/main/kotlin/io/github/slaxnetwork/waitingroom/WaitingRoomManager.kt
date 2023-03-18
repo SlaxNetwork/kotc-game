@@ -24,7 +24,7 @@ class WaitingRoomManager(
     }
 
     fun joinServer(player: Player) {
-        val kotcPlayer = playerRegistry.players[player.uniqueId]
+        val kotcPlayer = playerRegistry.findByUUID(player.uniqueId)
 
 //        if(gameHasStarted) {
 //            if(kotcPlayer == null) {
