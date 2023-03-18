@@ -5,6 +5,7 @@ import io.github.slaxnetwork.config.model.ConfigLocationModel
 import io.github.slaxnetwork.config.model.ConfigSpawnPointsModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.bukkit.Material
 
 @Serializable
 data class ConfigSkyWarsMapModel(
@@ -21,6 +22,9 @@ data class ConfigSkyWarsMapModel(
 
     @SerialName("chest_distance")
     val chestDistance: ChestDistance,
+
+    @SerialName("chest_types")
+    val chestTypes: List<Material>,
 
     @SerialName("spawn_points")
     val spawnPoints: ConfigSpawnPointsModel

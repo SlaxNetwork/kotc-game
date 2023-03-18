@@ -10,14 +10,15 @@ object KOTCTeamUtils {
     fun randomlyAssignToTeam(gamePlayers: Collection<MicroGamePlayer>) {
         val teams = validTeams.toMutableSet()
 
-        for(mgPlayer in gamePlayers) {
+        for(gamePlayer in gamePlayers) {
             val team = teams.shuffled()
                 .firstOrNull()
                 ?: throw NullPointerException("no valid team was able to be assigned.")
 
-            mgPlayer.team = team
-            KOTCLogger.info(team.toString())
+            gamePlayer.team = team
             teams.remove(team)
+
+            KOTCLogger.debug("team", "Assigned ${gamePlayer.bukkitPlayer?.name} to team $team.")
         }
     }
 

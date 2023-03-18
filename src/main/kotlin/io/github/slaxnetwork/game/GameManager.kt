@@ -82,12 +82,14 @@ class GameManager(
             return
         }
 
-        // micro game initialization
         currentMicroGame = microGameInstance
 
+        // init map
         mapInstance.initializeSpawnPoints()
         mapInstance.initialize()
         mapInstance.setupWorldBorder()
+        // init micro game
+        microGameInstance.initialize()
         microGameInstance.initializeListeners(pluginManager)
 
         microGameInstance.state = MicroGameState.IN_PRE_GAME

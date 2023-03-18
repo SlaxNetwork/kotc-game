@@ -2,6 +2,7 @@ package io.github.slaxnetwork.config.model.skywars
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.bukkit.Material
 
 @Serializable
 data class ConfigSkyWarsLootTableModel(
@@ -31,8 +32,7 @@ data class ConfigSkyWarsLootTableModel(
 
     @Serializable
     data class Drop(
-        @SerialName("material")
-        val materialName: String,
+        var material: Material,
         val amount: Int,
         val chance: Double
     )

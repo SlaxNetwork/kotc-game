@@ -56,9 +56,13 @@ class SkyWarsRushPopulateChestListener(
 
     @EventHandler
     fun onPlayerOpenChest(ev: PlayerInteractEvent) {
-        if(ev.action != Action.RIGHT_CLICK_BLOCK || ev.clickedBlock?.type != Material.BARREL) {
+        if(
+            ev.action != Action.RIGHT_CLICK_BLOCK
+            || !map.chestTypes.contains(ev.clickedBlock?.type)
+        ) {
             return
         }
+
         val block = ev.clickedBlock
             ?: return
 
@@ -80,23 +84,30 @@ class SkyWarsRushPopulateChestListener(
         val chestType = getChestType(swPlayer.team, block.location)
         val dropTable = chestType.toDropTable(lootTable)
 
-        val drops = getDropsFromTable(dropTable)
+        val drops = try {
+            getDropsFromTable(dropTable)
+        } catch(ex: IllegalArgumentException) {
+            ex.printStackTrace()
+            mutableListOf()
+        }
         if(chestType == ChestType.SPAWN || chestType == ChestType.SPAWN_OTHER) {
-            // TODO: 3/17/2023 cleanup pls
-            for((index, drop) in drops.withIndex()) {
-                if(drop.materialName.equals("WHITE_CONCRETE", true)) {
-                    drops[index] = ConfigSkyWarsLootTableModel.Drop(teamToWoolMap[swPlayer.team]?.name ?: "WHITE_CONCRETE", drop.amount, drop.chance)
+            for(drop in drops) {
+                if(drop.material != Material.WHITE_CONCRETE) {
+                    continue
                 }
+
+                drop.material = teamToWoolMap[swPlayer.team] ?: Material.WHITE_CONCRETE
             }
         }
 
-        for(drop in drops) {
-            val material = Material.valueOf(drop.materialName)
+        // Mainly just for development.
+        containerInventory.clear()
 
+        for(drop in drops) {
             if(dropTable.sorted) {
-                containerInventory.addItem(ItemStack(material, drop.amount))
+                containerInventory.addItem(ItemStack(drop.material, drop.amount))
             } else {
-                containerInventory.setItem(containerInventory.getRandomEmptySlot(), ItemStack(material, drop.amount))
+                containerInventory.setItem(containerInventory.getRandomEmptySlot(), ItemStack(drop.material, drop.amount))
             }
         }
 

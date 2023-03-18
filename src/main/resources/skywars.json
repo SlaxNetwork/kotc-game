@@ -65,6 +65,7 @@
         "spawn": 10.0,
         "center": 5.0
       },
+      "chest_types": ["BARREL"],
       "spawn_points": {
         "team": {
           "red": [
