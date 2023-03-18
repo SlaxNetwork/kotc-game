@@ -5,6 +5,7 @@ package io.github.slaxnetwork.config
 
 import io.github.slaxnetwork.KOTCGame
 import io.github.slaxnetwork.config.types.Config
+import io.github.slaxnetwork.config.types.SoundsConfig
 import io.github.slaxnetwork.config.types.WaitingRoomConfig
 import io.github.slaxnetwork.config.types.game.SkyWarsRushConfig
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -17,6 +18,7 @@ import kotlin.properties.ReadOnlyProperty
 
 private val RESOURCES = setOf(
     Pair("config.json", Config::class),
+    Pair("sounds.json", SoundsConfig::class),
     Pair("waiting_room.json", WaitingRoomConfig::class),
     Pair("skywars.json", SkyWarsRushConfig::class)
 )

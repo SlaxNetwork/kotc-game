@@ -1,5 +1,7 @@
 package io.github.slaxnetwork.listeners
 
+import io.github.slaxnetwork.config.injectConfig
+import io.github.slaxnetwork.config.types.SoundsConfig
 import io.github.slaxnetwork.events.crown.KOTCCrownHolderDeathEvent
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
 import org.bukkit.Bukkit
@@ -10,6 +12,8 @@ import org.bukkit.event.entity.PlayerDeathEvent
 class PlayerDeathListener(
     private val kotcPlayerRegistry: KOTCPlayerRegistry
 ) : Listener {
+    private val soundsConfig by injectConfig<SoundsConfig>()
+
     @EventHandler
     fun onPlayerDeath(ev: PlayerDeathEvent) {
         val victim = ev.player
