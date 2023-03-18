@@ -98,6 +98,8 @@ class SkyWarsRushPopulateChestListener(
                 containerInventory.setItem(containerInventory.getRandomEmptySlot(), ItemStack(material, drop.amount))
             }
         }
+
+        invalidChests.add(block.location)
     }
 
     private fun getChestType(team: KOTCTeam, blockLocation: Location): ChestType {
