@@ -12,11 +12,11 @@ repositories {
     mavenCentral()
     mavenLocal()
 
-    maven("https://repo.purpurmc.org/snapshots")
+    maven("https://repo.papermc.io/repository/maven-public/")
 }
 
 dependencies {
-    compileOnly("org.purpurmc.purpur:purpur-api:1.19.3-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
 
     compileOnly("io.github.slaxnetwork:bukkit-core:0.0.1")
     compileOnly("io.github.slaxnetwork:kyouko-wrapper:0.0.1")
