@@ -1,14 +1,20 @@
 package io.github.slaxnetwork.player
 
+import io.github.slaxnetwork.bukkitcore.profile.ProfileRegistry
 import java.util.*
 
-class KOTCPlayerRegistry {
+class KOTCPlayerRegistry(
+    private val profileRegistry: ProfileRegistry
+) {
     private val _players = mutableSetOf<KOTCPlayer>()
     val players: Set<KOTCPlayer>
         get() = Collections.unmodifiableSet(_players)
 
     fun add(uuid: UUID): KOTCPlayer {
-        val kotcPlayer = KOTCPlayer(uuid)
+        val profile = profileRegistry.profiles[uuid]
+            ?: throw NullPointerException("no profile found for $uuid")
+
+        val kotcPlayer = KOTCPlayer(uuid, profile)
         _players.add(kotcPlayer)
 
         return kotcPlayer

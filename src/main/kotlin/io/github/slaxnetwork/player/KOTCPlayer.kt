@@ -5,6 +5,7 @@ import io.github.slaxnetwork.events.KOTCPlayerReconnectEvent
 import io.github.slaxnetwork.events.crown.KOTCPlayerCrownLostEvent
 import io.github.slaxnetwork.events.crown.KOTCPlayerCrownObtainedEvent
 import io.github.slaxnetwork.game.microgame.team.KOTCTeam
+import io.github.slaxnetwork.kyouko.models.profile.Profile
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.*
@@ -13,7 +14,8 @@ import java.util.*
  * The generic player object that holds non-game specific data.
  */
 data class KOTCPlayer(
-    val uuid: UUID
+    val uuid: UUID,
+    val profile: Profile
 ) {
     val bukkitPlayer: Player?
         get() = Bukkit.getPlayer(uuid)

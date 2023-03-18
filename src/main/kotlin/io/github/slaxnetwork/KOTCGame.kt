@@ -20,7 +20,7 @@ class KOTCGame : SuspendingJavaPlugin() {
     lateinit var bukkitCore: BukkitCoreAPI
         private set
 
-    lateinit var playerRegistry: KOTCPlayerRegistry
+    lateinit var kotcPlayerRegistry: KOTCPlayerRegistry
         private set
 
     lateinit var mapManager: MapManager
@@ -43,14 +43,14 @@ class KOTCGame : SuspendingJavaPlugin() {
         mm = bukkitCore.getBaseMiniMessageBuilder()
             .build()
 
-        playerRegistry = KOTCPlayerRegistry()
+        kotcPlayerRegistry = KOTCPlayerRegistry()
 
         mapManager = MapManager()
         mapManager.initialize()
 
-        waitingRoomManager = WaitingRoomManager(playerRegistry, bukkitCore.profileRegistry)
+        waitingRoomManager = WaitingRoomManager(kotcPlayerRegistry, bukkitCore.profileRegistry)
 
-        gameManager = GameManager(playerRegistry, waitingRoomManager, mapManager, server.scheduler, server.pluginManager)
+        gameManager = GameManager(kotcPlayerRegistry, waitingRoomManager, mapManager, server.scheduler, server.pluginManager)
 
         registerCommands()
         registerListeners()
@@ -69,11 +69,11 @@ class KOTCGame : SuspendingJavaPlugin() {
     private fun registerListeners() {
         // non-suspending listeners.
         setOf(
-            PlayerJoinListener(playerRegistry, waitingRoomManager),
-            PlayerQuitListener(playerRegistry, gameManager),
-            PlayerDeathListener(playerRegistry),
+            PlayerJoinListener(kotcPlayerRegistry, waitingRoomManager),
+            PlayerQuitListener(kotcPlayerRegistry, gameManager),
+            PlayerDeathListener(kotcPlayerRegistry),
 
-            KOTCPlayerConnectionListeners(gameManager, playerRegistry, bukkitCore.profileRegistry),
+            KOTCPlayerConnectionListeners(gameManager, kotcPlayerRegistry, bukkitCore.profileRegistry),
             KOTCPlayerCrownListeners(gameManager.rubiesHandler)
         ).forEach { server.pluginManager.registerEvents(it, this) }
     }
