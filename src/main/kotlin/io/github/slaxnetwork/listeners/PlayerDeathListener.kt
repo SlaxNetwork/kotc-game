@@ -34,6 +34,12 @@ class PlayerDeathListener(
         val kotcPlayerVictim = microGame.findKOTCPlayerByUUID(victim.uniqueId)
             ?: return
 
+        val subTitle = mm.deserialize(
+            "<white><icon:emoji_skull> <red><killer_name>",
+            Placeholder.unparsed("killer_name", killer.name)
+        )
+        victim.showTitle(Title.title(Component.empty(), subTitle))
+
         microGame.deathHandler.handleDeath(kotcPlayerKiller, kotcPlayerVictim)
     }
 
@@ -52,15 +58,6 @@ class PlayerDeathListener(
         if(killer != null) {
             val kotcPlayerKiller = kotcPlayerRegistry.findByUUID(killer.uniqueId)
                 ?: return
-
-            val subTitle = mm.deserialize(
-                "<white><icon:emoji_skull> <red><victim_name>",
-                Placeholder.unparsed("victim_name", victim.name)
-            )
-            killer.showTitle(Title.title(
-                Component.empty(),
-                subTitle
-            ))
 
             Bukkit.getPluginManager().callEvent(KOTCCrownHolderDeathEvent(
                 victim = kotcPlayerVictim,
