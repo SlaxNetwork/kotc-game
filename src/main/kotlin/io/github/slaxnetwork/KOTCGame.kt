@@ -3,6 +3,7 @@ package io.github.slaxnetwork
 import com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin
 import io.github.slaxnetwork.bukkitcore.BukkitCoreAPI
 import io.github.slaxnetwork.commands.EndGameCommand
+import io.github.slaxnetwork.commands.ShowTestTitleCommand
 import io.github.slaxnetwork.commands.TestRunCommand
 import io.github.slaxnetwork.config.loadInjectableResources
 import io.github.slaxnetwork.game.GameManager
@@ -43,7 +44,7 @@ class KOTCGame : SuspendingJavaPlugin() {
         mm = bukkitCore.getBaseMiniMessageBuilder()
             .build()
 
-        kotcPlayerRegistry = KOTCPlayerRegistry()
+        kotcPlayerRegistry = KOTCPlayerRegistry(bukkitCore.profileRegistry)
 
         mapManager = MapManager()
         mapManager.initialize()
@@ -56,14 +57,13 @@ class KOTCGame : SuspendingJavaPlugin() {
         registerListeners()
     }
 
-    override suspend fun onDisableAsync() {
-
-    }
+    override suspend fun onDisableAsync() { }
 
     private fun registerCommands() {
         // non-suspending commands.
         getCommand("test")?.setExecutor(TestRunCommand(this))
         getCommand("endgame")?.setExecutor(EndGameCommand())
+        getCommand("showtesttitle")?.setExecutor(ShowTestTitleCommand())
     }
 
     private fun registerListeners() {
@@ -71,7 +71,7 @@ class KOTCGame : SuspendingJavaPlugin() {
         setOf(
             PlayerJoinListener(kotcPlayerRegistry, waitingRoomManager),
             PlayerQuitListener(kotcPlayerRegistry, gameManager),
-            PlayerDeathListener(kotcPlayerRegistry),
+            PlayerDeathListener(kotcPlayerRegistry, gameManager),
 
             KOTCPlayerConnectionListeners(gameManager, kotcPlayerRegistry, bukkitCore.profileRegistry),
             KOTCPlayerCrownListeners(gameManager.rubiesHandler)

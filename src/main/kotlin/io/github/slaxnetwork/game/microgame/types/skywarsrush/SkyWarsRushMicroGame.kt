@@ -1,6 +1,7 @@
 package io.github.slaxnetwork.game.microgame.types.skywarsrush
 
 import io.github.slaxnetwork.game.microgame.MicroGame
+import io.github.slaxnetwork.game.microgame.MicroGameDeathHandler
 import io.github.slaxnetwork.game.microgame.MicroGameType
 import io.github.slaxnetwork.game.microgame.maps.MicroGameMap
 import io.github.slaxnetwork.game.microgame.player.MicroGamePlayerRegistry
@@ -8,6 +9,7 @@ import io.github.slaxnetwork.game.microgame.player.MicroGamePlayerRegistryHolder
 import io.github.slaxnetwork.game.microgame.team.KOTCTeamUtils
 import io.github.slaxnetwork.game.microgame.types.skywarsrush.listeners.SkyWarsRushPopulateChestListener
 import io.github.slaxnetwork.game.microgame.types.skywarsrush.listeners.SkyWarsRushPlayerDeathListener
+import io.github.slaxnetwork.player.KOTCPlayer
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
 import org.bukkit.plugin.PluginManager
 import org.bukkit.scheduler.BukkitScheduler
@@ -20,6 +22,8 @@ class SkyWarsRushMicroGame(
     MicroGamePlayerRegistryHolder<SkyWarsRushPlayer>
 {
     override val microGamePlayerRegistry = MicroGamePlayerRegistry<SkyWarsRushPlayer>()
+
+    override val deathHandler = DeathHandler(this)
 
     override fun initialize() {
         for(kotcPlayer in kotcPlayers) {
@@ -56,6 +60,14 @@ class SkyWarsRushMicroGame(
             ),
             pluginManager
         )
+    }
+
+    class DeathHandler(override val microGame: SkyWarsRushMicroGame) : MicroGameDeathHandler {
+        private val map get() = microGame.map
+
+        override fun handleDeath(killer: KOTCPlayer, victim: KOTCPlayer) {
+
+        }
     }
 
     companion object {

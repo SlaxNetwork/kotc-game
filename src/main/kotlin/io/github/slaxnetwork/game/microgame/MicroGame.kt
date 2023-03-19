@@ -20,6 +20,8 @@ abstract class MicroGame(
 
     private var preGameTimer: Int = 30
 ) {
+    abstract val deathHandler: MicroGameDeathHandler
+
     abstract val map: MicroGameMap
 
     /**

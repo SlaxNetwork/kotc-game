@@ -3,6 +3,8 @@ package io.github.slaxnetwork.config.types.game
 import io.github.slaxnetwork.config.model.ConfigBorderModel
 import io.github.slaxnetwork.config.model.ConfigLocationModel
 import io.github.slaxnetwork.config.model.ConfigSpawnPointsModel
+import io.github.slaxnetwork.config.model.map.BaseMapConfig
+import io.github.slaxnetwork.config.model.map.ConfigMapMetaModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.bukkit.Material
@@ -10,15 +12,18 @@ import org.bukkit.Material
 @Serializable
 data class ConfigSkyWarsMapModel(
     @SerialName("world")
-    val worldName: String,
+    override val worldName: String,
 
-    val enabled: Boolean,
+    override val enabled: Boolean,
 
-    val meta: Meta,
+    override val meta: ConfigMapMetaModel,
 
-    val center: ConfigLocationModel,
+    override val center: ConfigLocationModel,
 
-    val border: ConfigBorderModel,
+    @SerialName("death_spawn_point")
+    override val deathSpawnPoint: ConfigLocationModel,
+
+    override val border: ConfigBorderModel,
 
     @SerialName("chest_distance")
     val chestDistance: ChestDistance,
@@ -27,14 +32,8 @@ data class ConfigSkyWarsMapModel(
     val chestTypes: List<Material>,
 
     @SerialName("spawn_points")
-    val spawnPoints: ConfigSpawnPointsModel
-) {
-    @Serializable
-    data class Meta(
-        val name: String,
-        val contributors: List<String>
-    )
-
+    override val spawnPoints: ConfigSpawnPointsModel
+): BaseMapConfig {
     @Serializable
     data class ChestDistance(
         val spawn: Double,

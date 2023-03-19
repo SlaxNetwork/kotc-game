@@ -46,5 +46,6 @@ bukkit {
     commands {
         register("test")
         register("endgame")
+        register("showtesttitle")
     }
 }

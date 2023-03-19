@@ -3,19 +3,42 @@ package io.github.slaxnetwork.listeners
 import io.github.slaxnetwork.config.injectConfig
 import io.github.slaxnetwork.config.types.SoundsConfig
 import io.github.slaxnetwork.events.crown.KOTCCrownHolderDeathEvent
+import io.github.slaxnetwork.game.GameManager
+import io.github.slaxnetwork.mm
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
+import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.PlayerDeathEvent
 
 class PlayerDeathListener(
-    private val kotcPlayerRegistry: KOTCPlayerRegistry
+    private val kotcPlayerRegistry: KOTCPlayerRegistry,
+    private val gameManager: GameManager
 ) : Listener {
     private val soundsConfig by injectConfig<SoundsConfig>()
 
     @EventHandler
     fun onPlayerDeath(ev: PlayerDeathEvent) {
+        val microGame = gameManager.currentMicroGame
+            ?: return
+
+        val victim = ev.player
+        val killer = ev.player.killer
+            ?: return
+
+        val kotcPlayerKiller = microGame.findKOTCPlayerByUUID(killer.uniqueId)
+            ?: return
+        val kotcPlayerVictim = microGame.findKOTCPlayerByUUID(victim.uniqueId)
+            ?: return
+
+        microGame.deathHandler.handleDeath(kotcPlayerKiller, kotcPlayerVictim)
+    }
+
+    @EventHandler
+    fun onCrownHolderDeath(ev: PlayerDeathEvent) {
         val victim = ev.player
         val killer = ev.player.killer
 
@@ -29,6 +52,15 @@ class PlayerDeathListener(
         if(killer != null) {
             val kotcPlayerKiller = kotcPlayerRegistry.findByUUID(killer.uniqueId)
                 ?: return
+
+            val subTitle = mm.deserialize(
+                "<white><icon:emoji_skull> <red><victim_name>",
+                Placeholder.unparsed("victim_name", victim.name)
+            )
+            killer.showTitle(Title.title(
+                Component.empty(),
+                subTitle
+            ))
 
             Bukkit.getPluginManager().callEvent(KOTCCrownHolderDeathEvent(
                 victim = kotcPlayerVictim,

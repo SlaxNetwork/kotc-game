@@ -1,5 +1,6 @@
 package io.github.slaxnetwork.listeners.kotc
 
+import io.github.slaxnetwork.bukkitcore.minimessage.tags.LanguageTags
 import io.github.slaxnetwork.bukkitcore.minimessage.tags.ProfileTags
 import io.github.slaxnetwork.bukkitcore.profile.ProfileRegistry
 import io.github.slaxnetwork.events.KOTCPlayerDisconnectEvent
@@ -33,7 +34,7 @@ class KOTCPlayerConnectionListeners(
 
         bukkitPlayer.sendMessage(mm.deserialize(
             "<icon:symbol_warning> <text>",
-            ProfileTags.translateText("test.message", profile) // warn about joining mid-match and not being able to join the micro game.
+            LanguageTags.translateText("test.message", profile) // warn about joining mid-match and not being able to join the micro game.
         ))
     }
 
@@ -57,7 +58,7 @@ class KOTCPlayerConnectionListeners(
 
             val message = mm.deserialize(
                 "<icon:symbol_warning> <text>",
-                ProfileTags.translateText(
+                LanguageTags.translateText(
                     id =  if(gameManager.isRunningMicroGame) "game.crown_holder.disconnect.match" else "game.crown_holder.disconnect.waiting",
                     profile = profile
                 )

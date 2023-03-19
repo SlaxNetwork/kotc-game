@@ -1,19 +1,22 @@
 package io.github.slaxnetwork.game.microgame.maps
 
-import io.github.slaxnetwork.config.types.game.ConfigSkyWarsMapModel
+import io.github.slaxnetwork.config.model.map.BaseMapConfig
 import io.github.slaxnetwork.game.microgame.team.KOTCTeam
-import kotlinx.coroutines.flow.merge
 import org.bukkit.Location
 import org.bukkit.World
 import java.util.*
 
 abstract class MicroGameMap(
     val id: String,
-    private val mapConfig: ConfigSkyWarsMapModel
+    private val mapConfig: BaseMapConfig
 ) {
     val center: Location = mapConfig.center
         .toBukkitLocation()
         ?: throw IllegalArgumentException("Map $id doesn't have a center point set in config.")
+
+    val deathSpawnPoint: Location = mapConfig.deathSpawnPoint
+        .toBukkitLocation()
+        ?: throw IllegalArgumentException("Map $id doesn't have a death spawn point set in config.")
 
     private val _teamSpawnPoints = mutableMapOf<KOTCTeam, MutableList<Location>>()
     val teamSpawnPoints: Map<KOTCTeam, List<Location>>
@@ -30,7 +33,7 @@ abstract class MicroGameMap(
 
     open fun delete() { }
 
-    @Deprecated("use property accessor ", ReplaceWith("teamSpawnPoints[team] ?: emptyList()"))
+    @Deprecated("use property accessor", ReplaceWith("teamSpawnPoints[team] ?: emptyList()"))
     fun getTeamSpawnPoints(team: KOTCTeam): List<Location> {
         return teamSpawnPoints[team] ?: emptyList()
     }
