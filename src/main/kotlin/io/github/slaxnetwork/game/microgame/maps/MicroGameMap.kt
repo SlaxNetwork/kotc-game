@@ -14,9 +14,9 @@ abstract class MicroGameMap(
         .toBukkitLocation()
         ?: throw IllegalArgumentException("Map $id doesn't have a center point set in config.")
 
-    val deathSpawnPoint: Location = mapConfig.spectatorSpawnPoint
+    val spectatorSpawnPoint: Location = mapConfig.spectatorSpawnPoint
         .toBukkitLocation()
-        ?: throw IllegalArgumentException("Map $id doesn't have a death spawn point set in config.")
+        ?: throw IllegalArgumentException("Map $id doesn't have a spectator spawn point set in config.")
 
     private val _teamSpawnPoints = mutableMapOf<KOTCTeam, MutableList<Location>>()
     val teamSpawnPoints: Map<KOTCTeam, List<Location>>

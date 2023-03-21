@@ -23,12 +23,12 @@ class DefaultDeathHandlerImpl(override val microGame: MicroGame<*>) : MicroGameD
             }
 
             // tp to death spawn then start timer.
-            bukkitPlayer.teleport(map.deathSpawnPoint)
+            bukkitPlayer.teleport(map.spectatorSpawnPoint)
             respawnHandler.startRespawnTimer(victim)
             return
         }
 
         // teleport to death spawn point.
-        bukkitPlayer.teleport(map.deathSpawnPoint)
+        bukkitPlayer.teleport(map.spectatorSpawnPoint)
     }
 }
