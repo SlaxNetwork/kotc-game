@@ -1,5 +1,6 @@
 package io.github.slaxnetwork
 
+import com.comphenix.protocol.ProtocolLibrary
 import com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin
 import io.github.slaxnetwork.bukkitcore.BukkitCoreAPI
 import io.github.slaxnetwork.commands.EndGameCommand
@@ -79,6 +80,13 @@ class KOTCGame : SuspendingJavaPlugin() {
     }
 
     companion object {
+        /**
+         * Instance linking to the ProtocolLib [com.comphenix.protocol.ProtocolManager].
+         *
+         * Use this instance after [SuspendingJavaPlugin.onLoad] has completed.
+         */
+        val protocolManager get() = ProtocolLibrary.getProtocolManager()
+
         /**
          * Singleton instance should not be used outside of
          * utilities that require the main instance of our plugin.

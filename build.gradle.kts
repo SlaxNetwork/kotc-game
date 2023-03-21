@@ -13,6 +13,7 @@ repositories {
     mavenLocal()
 
     maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://repo.dmulloy2.net/repository/public/")
 }
 
 dependencies {
@@ -20,6 +21,8 @@ dependencies {
 
     compileOnly("io.github.slaxnetwork:bukkit-core-api:0.0.1")
     compileOnly("io.github.slaxnetwork:kyouko-wrapper:0.0.1")
+
+    compileOnly("com.comphenix.protocol:ProtocolLib:4.7.0")
 
     implementation("me.tech:chestuiplus:1.0.0")
 
