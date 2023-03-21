@@ -1,11 +1,11 @@
 package io.github.slaxnetwork.game
 
-import io.github.slaxnetwork.bukkitcore.profile.ProfileRegistry
 import io.github.slaxnetwork.game.microgame.MicroGame
 import io.github.slaxnetwork.game.microgame.MicroGameState
 import io.github.slaxnetwork.game.microgame.MicroGameType
 import io.github.slaxnetwork.game.microgame.maps.MapManager
-import io.github.slaxnetwork.game.microgame.types.skywarsrush.SkyWarsRushMicroGame
+import io.github.slaxnetwork.game.microgame.impl.skywarsrush.SkyWarsRushMicroGame
+import io.github.slaxnetwork.game.microgame.player.MicroGamePlayer
 import io.github.slaxnetwork.player.KOTCPlayer
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
 import io.github.slaxnetwork.waitingroom.WaitingRoomManager
@@ -30,7 +30,7 @@ class GameManager(
     /**
      * Current [MicroGame] instance being played.
      */
-    var currentMicroGame: MicroGame? = null
+    var currentMicroGame: MicroGame<*>? = null
         private set(value) {
             // inc round once micro game ends.
             if(value != null) {
@@ -57,6 +57,8 @@ class GameManager(
      */
     val currentCrownHolder: KOTCPlayer?
         get() = kotcPlayerRegistry.players.firstOrNull { it.crownHolder }
+
+    private val kotcPlayers get() = kotcPlayerRegistry.players
 
     /**
      * Start a [MicroGame].
@@ -122,6 +124,11 @@ class GameManager(
         }
 
         waitingRoomManager.setWorldBorder()
+
+//        kotcPlayers.mapNotNull { it.bukkitPlayer }
+//            .forEach {
+//
+//            }
 
         // end kotc.
         if(round == MAX_ROUNDS) {

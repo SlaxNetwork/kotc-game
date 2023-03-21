@@ -15,8 +15,8 @@ interface BaseMapConfig {
 
     val center: ConfigLocationModel
 
-    @SerialName("death_spawn_point")
-    val deathSpawnPoint: ConfigLocationModel
+    @SerialName("spectator_spawn_point")
+    val spectatorSpawnPoint: ConfigLocationModel
 
     val border: ConfigBorderModel
 

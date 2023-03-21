@@ -29,9 +29,9 @@ class PlayerDeathListener(
         val killer = ev.player.killer
             ?: return
 
-        val kotcPlayerKiller = microGame.findKOTCPlayerByUUID(killer.uniqueId)
+        val gamePlayerKiller = microGame.findGamePlayerByUUID(killer.uniqueId)
             ?: return
-        val kotcPlayerVictim = microGame.findKOTCPlayerByUUID(victim.uniqueId)
+        val gamePlayerVictim = microGame.findGamePlayerByUUID(victim.uniqueId)
             ?: return
 
         val subTitle = mm.deserialize(
@@ -40,7 +40,7 @@ class PlayerDeathListener(
         )
         victim.showTitle(Title.title(Component.empty(), subTitle))
 
-        microGame.deathHandler.handleDeath(kotcPlayerKiller, kotcPlayerVictim)
+        microGame.deathHandler.handleDeath(gamePlayerVictim, gamePlayerKiller)
     }
 
     @EventHandler

@@ -14,7 +14,7 @@ abstract class MicroGameMap(
         .toBukkitLocation()
         ?: throw IllegalArgumentException("Map $id doesn't have a center point set in config.")
 
-    val deathSpawnPoint: Location = mapConfig.deathSpawnPoint
+    val deathSpawnPoint: Location = mapConfig.spectatorSpawnPoint
         .toBukkitLocation()
         ?: throw IllegalArgumentException("Map $id doesn't have a death spawn point set in config.")
 
@@ -74,7 +74,7 @@ abstract class MicroGameMap(
                 }
 
                 _teamSpawnPoints[kotcTeam]?.let {
-                    for(location in locationModels.mapNotNull { it.toBukkitLocation(world.name) }) {
+                    for(location in locationModels.mapNotNull { model -> model.toBukkitLocation(world.name) }) {
                         it.add(location)
                     }
                 }

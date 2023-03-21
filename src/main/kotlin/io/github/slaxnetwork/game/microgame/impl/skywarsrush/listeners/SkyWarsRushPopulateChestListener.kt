@@ -1,4 +1,4 @@
-package io.github.slaxnetwork.game.microgame.types.skywarsrush.listeners
+package io.github.slaxnetwork.game.microgame.impl.skywarsrush.listeners
 
 import io.github.slaxnetwork.KOTCLogger
 import io.github.slaxnetwork.config.injectConfig
@@ -6,9 +6,9 @@ import io.github.slaxnetwork.config.model.skywars.ConfigSkyWarsLootTableModel
 import io.github.slaxnetwork.config.types.game.ConfigSkyWarsMapModel
 import io.github.slaxnetwork.config.types.game.SkyWarsRushConfig
 import io.github.slaxnetwork.game.microgame.team.KOTCTeam
-import io.github.slaxnetwork.game.microgame.types.skywarsrush.SkyWarsRushMap
-import io.github.slaxnetwork.game.microgame.types.skywarsrush.SkyWarsRushMicroGame
-import io.github.slaxnetwork.game.microgame.types.skywarsrush.SkyWarsRushPlayer
+import io.github.slaxnetwork.game.microgame.impl.skywarsrush.SkyWarsRushMap
+import io.github.slaxnetwork.game.microgame.impl.skywarsrush.SkyWarsRushMicroGame
+import io.github.slaxnetwork.game.microgame.impl.skywarsrush.SkyWarsRushPlayer
 import io.github.slaxnetwork.utils.getRandomEmptySlot
 import org.bukkit.Location
 import org.bukkit.Material

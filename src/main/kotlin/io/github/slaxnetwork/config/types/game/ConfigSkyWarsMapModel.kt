@@ -20,8 +20,8 @@ data class ConfigSkyWarsMapModel(
 
     override val center: ConfigLocationModel,
 
-    @SerialName("death_spawn_point")
-    override val deathSpawnPoint: ConfigLocationModel,
+    @SerialName("spectator_spawn_point")
+    override val spectatorSpawnPoint: ConfigLocationModel,
 
     override val border: ConfigBorderModel,
 

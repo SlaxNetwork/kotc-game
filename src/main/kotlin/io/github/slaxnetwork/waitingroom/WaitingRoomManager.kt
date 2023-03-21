@@ -20,7 +20,8 @@ class WaitingRoomManager(
         get() = waitingRoomConfig.spawnPoint.toBukkitLocation(waitingRoomConfig.worldName)
             ?: throw NullPointerException()
 
-    fun teleport() {
+    fun teleport(player: Player) {
+        player.teleport(spawnPoint)
     }
 
     fun joinServer(player: Player) {
@@ -41,7 +42,7 @@ class WaitingRoomManager(
 //        }
 
         playerRegistry.add(player.uniqueId)
-        teleport()
+        teleport(player)
     }
 
     fun leaveServer(uuid: UUID) {

@@ -1,4 +1,4 @@
-package io.github.slaxnetwork.game.microgame.types.skywarsrush
+package io.github.slaxnetwork.game.microgame.impl.skywarsrush
 
 import io.github.slaxnetwork.config.types.game.ConfigSkyWarsMapModel
 import io.github.slaxnetwork.game.microgame.maps.MicroGameMap

@@ -1,7 +1,6 @@
-package io.github.slaxnetwork.game.microgame.types.skywarsrush.listeners
+package io.github.slaxnetwork.game.microgame.impl.skywarsrush.listeners
 
-import io.github.slaxnetwork.game.microgame.types.skywarsrush.SkyWarsRushMicroGame
-import org.bukkit.Bukkit
+import io.github.slaxnetwork.game.microgame.impl.skywarsrush.SkyWarsRushMicroGame
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.PlayerDeathEvent
