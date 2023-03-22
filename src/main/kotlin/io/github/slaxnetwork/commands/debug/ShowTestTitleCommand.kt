@@ -1,4 +1,4 @@
-package io.github.slaxnetwork.commands
+package io.github.slaxnetwork.commands.debug
 
 import io.github.slaxnetwork.mm
 import net.kyori.adventure.text.Component

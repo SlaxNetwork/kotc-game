@@ -5,7 +5,6 @@ import io.github.slaxnetwork.game.microgame.MicroGameState
 import io.github.slaxnetwork.game.microgame.MicroGameType
 import io.github.slaxnetwork.game.microgame.maps.MapManager
 import io.github.slaxnetwork.game.microgame.impl.skywarsrush.SkyWarsRushMicroGame
-import io.github.slaxnetwork.game.microgame.player.MicroGamePlayer
 import io.github.slaxnetwork.player.KOTCPlayer
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
 import io.github.slaxnetwork.waitingroom.WaitingRoomManager
@@ -20,6 +19,8 @@ class GameManager(
     private val pluginManager: PluginManager
 ) {
     val rubiesHandler = RubiesHandler(this, scheduler)
+
+    private val gameVoteHandler = GameVoteHandler(scheduler)
 
     /**
      * Current KOTC round.
@@ -41,7 +42,7 @@ class GameManager(
         }
 
     /**
-     * Whether the game has started.
+     * Whether the KOTC Game has started.
      */
     val hasGameStarted: Boolean
         get() = round > 0
@@ -59,6 +60,11 @@ class GameManager(
         get() = kotcPlayerRegistry.players.firstOrNull { it.crownHolder }
 
     private val kotcPlayers get() = kotcPlayerRegistry.players
+
+    fun startGame() {
+        waitingRoomManager.preventNonAuthorizedConnections()
+        gameVoteHandler.startGameVote()
+    }
 
     /**
      * Start a [MicroGame].

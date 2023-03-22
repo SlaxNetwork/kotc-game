@@ -1,4 +1,4 @@
-package io.github.slaxnetwork.commands
+package io.github.slaxnetwork.commands.debug
 
 import io.github.slaxnetwork.KOTCGame
 import io.github.slaxnetwork.game.microgame.MicroGameType

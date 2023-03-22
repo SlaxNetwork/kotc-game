@@ -6,7 +6,7 @@ import io.github.slaxnetwork.game.microgame.death.MicroGameTimedRespawnHandler
 import io.github.slaxnetwork.game.microgame.death.RespawnableMicroGame
 import io.github.slaxnetwork.game.microgame.player.MicroGamePlayer
 
-class DefaultDeathHandlerImpl(override val microGame: MicroGame<*>) : MicroGameDeathHandler {
+class DefaultDeathHandlerImpl(private val microGame: MicroGame<*>) : MicroGameDeathHandler {
     private val map get() = microGame.map
 
     override fun handleDeath(victim: MicroGamePlayer, killer: MicroGamePlayer) {

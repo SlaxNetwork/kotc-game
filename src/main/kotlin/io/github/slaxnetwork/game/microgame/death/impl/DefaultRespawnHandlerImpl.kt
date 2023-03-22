@@ -8,7 +8,7 @@ import io.github.slaxnetwork.game.microgame.death.RespawnableMicroGame
 import io.github.slaxnetwork.game.microgame.player.MicroGamePlayer
 import io.github.slaxnetwork.game.microgame.team.KOTCTeam
 
-class DefaultRespawnHandlerImpl(override val microGame: MicroGame<*>) : MicroGameRespawnHandler {
+class DefaultRespawnHandlerImpl(private val microGame: MicroGame<*>) : MicroGameRespawnHandler {
     private val map get() = microGame.map
 
     override fun respawn(player: MicroGamePlayer) {

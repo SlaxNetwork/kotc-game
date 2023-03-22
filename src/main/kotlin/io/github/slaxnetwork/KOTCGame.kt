@@ -3,11 +3,12 @@ package io.github.slaxnetwork
 import com.comphenix.protocol.ProtocolLibrary
 import com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin
 import io.github.slaxnetwork.bukkitcore.BukkitCoreAPI
-import io.github.slaxnetwork.commands.EndGameCommand
-import io.github.slaxnetwork.commands.ShowTestTitleCommand
-import io.github.slaxnetwork.commands.TestRunCommand
+import io.github.slaxnetwork.commands.debug.DebugEndGameCommand
+import io.github.slaxnetwork.commands.debug.ShowTestTitleCommand
+import io.github.slaxnetwork.commands.debug.TestRunCommand
 import io.github.slaxnetwork.config.loadInjectableResources
 import io.github.slaxnetwork.game.GameManager
+import io.github.slaxnetwork.game.GameVoteHandler
 import io.github.slaxnetwork.game.microgame.maps.MapManager
 import io.github.slaxnetwork.listeners.PlayerDeathListener
 import io.github.slaxnetwork.listeners.PlayerJoinListener
@@ -34,6 +35,9 @@ class KOTCGame : SuspendingJavaPlugin() {
     lateinit var waitingRoomManager: WaitingRoomManager
         private set
 
+    lateinit var gameVoteHandler: GameVoteHandler
+        private set
+
     override suspend fun onLoadAsync() {
         loadInjectableResources(this)
     }
@@ -50,9 +54,10 @@ class KOTCGame : SuspendingJavaPlugin() {
         mapManager = MapManager()
         mapManager.initialize()
 
-        waitingRoomManager = WaitingRoomManager(kotcPlayerRegistry, bukkitCore.profileRegistry)
+        waitingRoomManager = WaitingRoomManager()
 
         gameManager = GameManager(kotcPlayerRegistry, waitingRoomManager, mapManager, server.scheduler, server.pluginManager)
+        gameVoteHandler = GameVoteHandler(gameManager, server.scheduler)
 
         registerCommands()
         registerListeners()
@@ -63,18 +68,18 @@ class KOTCGame : SuspendingJavaPlugin() {
     private fun registerCommands() {
         // non-suspending commands.
         getCommand("test")?.setExecutor(TestRunCommand(this))
-        getCommand("endgame")?.setExecutor(EndGameCommand())
+        getCommand("endgame")?.setExecutor(DebugEndGameCommand(gameManager, bukkitCore.profileRegistry))
         getCommand("showtesttitle")?.setExecutor(ShowTestTitleCommand())
     }
 
     private fun registerListeners() {
         // non-suspending listeners.
         setOf(
-            PlayerJoinListener(kotcPlayerRegistry, waitingRoomManager),
+            PlayerJoinListener(kotcPlayerRegistry, gameManager, waitingRoomManager),
             PlayerQuitListener(kotcPlayerRegistry, gameManager),
             PlayerDeathListener(kotcPlayerRegistry, gameManager),
 
-            KOTCPlayerConnectionListeners(gameManager, kotcPlayerRegistry, bukkitCore.profileRegistry),
+            KOTCPlayerConnectionListeners(gameManager, kotcPlayerRegistry),
             KOTCPlayerCrownListeners(gameManager.rubiesHandler)
         ).forEach { server.pluginManager.registerEvents(it, this) }
     }
