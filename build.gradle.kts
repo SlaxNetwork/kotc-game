@@ -3,7 +3,8 @@ plugins {
     kotlin("plugin.serialization") version "1.8.10"
 
     id("net.minecrell.plugin-yml.bukkit") version "0.5.2"
-    id("com.github.johnrengelman.shadow") version "7.1.2"}
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+}
 
 group = "io.github.slaxnetwork"
 version = "0.0.1"
@@ -30,12 +31,18 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0-Beta")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.10")
 
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.11.0")
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.11.0")
+    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.11.0")
+    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.11.0")
 }
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+}
+
+tasks {
+    shadowJar {
+        exclude("kotlin/**/*.class")
+    }
 }
 
 bukkit {
@@ -50,5 +57,9 @@ bukkit {
         register("test")
         register("endgame")
         register("showtesttitle")
+        register("concludevote")
+        register("startvote")
+        register("vote")
+        register("sbtest")
     }
 }
