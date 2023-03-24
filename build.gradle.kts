@@ -22,6 +22,7 @@ dependencies {
 
     compileOnly("io.github.slaxnetwork:bukkit-core-api:0.0.1")
     compileOnly("io.github.slaxnetwork:kyouko-wrapper:0.0.1")
+    implementation("io.github.slaxnetwork:bukkit-common:0.0.1")
 
     compileOnly("com.comphenix.protocol:ProtocolLib:4.7.0")
 

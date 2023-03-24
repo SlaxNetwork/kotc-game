@@ -12,10 +12,6 @@ data class ConfigSkyWarsLootTableModel(
     val middle: DropTable,
     val center: DropTable
 ) {
-    init {
-
-    }
-
     @Serializable
     data class DropTable(
         val sorted: Boolean,

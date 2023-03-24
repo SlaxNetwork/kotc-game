@@ -1,10 +1,10 @@
 package io.github.slaxnetwork.config.types.game
 
-import io.github.slaxnetwork.config.model.ConfigBorderModel
-import io.github.slaxnetwork.config.model.ConfigLocationModel
+import io.github.slaxnetwork.bukkitcommon.config.model.ConfigBorderModel
+import io.github.slaxnetwork.bukkitcommon.config.model.ConfigLocationModel
+import io.github.slaxnetwork.bukkitcommon.config.model.map.ConfigMapMetaModel
 import io.github.slaxnetwork.config.model.ConfigSpawnPointsModel
 import io.github.slaxnetwork.config.model.map.BaseMapConfig
-import io.github.slaxnetwork.config.model.map.ConfigMapMetaModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.bukkit.Material

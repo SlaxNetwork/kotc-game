@@ -1,6 +1,6 @@
 package io.github.slaxnetwork.listeners
 
-import io.github.slaxnetwork.config.injectConfig
+import io.github.slaxnetwork.bukkitcommon.config.injectConfig
 import io.github.slaxnetwork.config.types.SoundsConfig
 import io.github.slaxnetwork.events.crown.KOTCCrownHolderDeathEvent
 import io.github.slaxnetwork.game.GameManager

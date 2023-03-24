@@ -1,6 +1,6 @@
 package io.github.slaxnetwork
 
-import io.github.slaxnetwork.config.injectConfig
+import io.github.slaxnetwork.bukkitcommon.config.injectConfig
 import io.github.slaxnetwork.config.types.Config
 import java.util.logging.Logger
 

@@ -1,6 +1,6 @@
 package io.github.slaxnetwork.game.microgame.maps
 
-import io.github.slaxnetwork.config.injectConfig
+import io.github.slaxnetwork.bukkitcommon.config.injectConfig
 import io.github.slaxnetwork.config.types.game.SkyWarsRushConfig
 import io.github.slaxnetwork.game.microgame.MicroGameType
 import io.github.slaxnetwork.game.microgame.impl.skywarsrush.SkyWarsRushMap

@@ -2,11 +2,15 @@ package io.github.slaxnetwork
 
 import com.comphenix.protocol.ProtocolLibrary
 import com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin
+import io.github.slaxnetwork.bukkitcommon.config.loadInjectableResources
 import io.github.slaxnetwork.bukkitcore.BukkitCoreAPI
 import io.github.slaxnetwork.bukkitcore.scoreboard.ScoreboardManager
 import io.github.slaxnetwork.commands.debug.*
 import io.github.slaxnetwork.commands.player.VoteCommand
-import io.github.slaxnetwork.config.loadInjectableResources
+import io.github.slaxnetwork.config.types.Config
+import io.github.slaxnetwork.config.types.SoundsConfig
+import io.github.slaxnetwork.config.types.WaitingRoomConfig
+import io.github.slaxnetwork.config.types.game.SkyWarsRushConfig
 import io.github.slaxnetwork.game.GameManager
 import io.github.slaxnetwork.game.vote.GameVoteHandler
 import io.github.slaxnetwork.game.microgame.maps.MapManager
@@ -44,7 +48,12 @@ class KOTCGame : SuspendingJavaPlugin() {
         private set
 
     override suspend fun onLoadAsync() {
-        loadInjectableResources(this)
+        loadInjectableResources(this, mapOf(
+            "config.json" to Config::class,
+            "sounds.json" to SoundsConfig::class,
+            "waiting_room.json" to WaitingRoomConfig::class,
+            "skywars.json" to SkyWarsRushConfig::class
+        ))
     }
 
     override suspend fun onEnableAsync() {
