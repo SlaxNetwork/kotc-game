@@ -35,7 +35,7 @@ class RubiesHandler(
 
         }
 
-        // tmp period
+        // TODO: 3/23/2023 temporary time period.
         crownHolderRewardTask = scheduler.runTaskTimer(KOTCGame.get(), runnable, 0L, 60L)
     }
 

@@ -1,26 +1,28 @@
 package io.github.slaxnetwork.game
 
+import io.github.slaxnetwork.KOTCGame
 import io.github.slaxnetwork.game.microgame.MicroGame
 import io.github.slaxnetwork.game.microgame.MicroGameState
 import io.github.slaxnetwork.game.microgame.MicroGameType
 import io.github.slaxnetwork.game.microgame.maps.MapManager
 import io.github.slaxnetwork.game.microgame.impl.skywarsrush.SkyWarsRushMicroGame
+import io.github.slaxnetwork.game.vote.GameVoteHandler
 import io.github.slaxnetwork.player.KOTCPlayer
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
 import io.github.slaxnetwork.waitingroom.WaitingRoomManager
 import org.bukkit.plugin.PluginManager
 import org.bukkit.scheduler.BukkitScheduler
+import org.bukkit.scheduler.BukkitTask
 
 class GameManager(
     private val kotcPlayerRegistry: KOTCPlayerRegistry,
     private val waitingRoomManager: WaitingRoomManager,
     private val mapManager: MapManager,
     private val scheduler: BukkitScheduler,
-    private val pluginManager: PluginManager
+    private val pluginManager: PluginManager,
+    private val gameVoteHandler: GameVoteHandler
 ) {
     val rubiesHandler = RubiesHandler(this, scheduler)
-
-    private val gameVoteHandler = GameVoteHandler(scheduler)
 
     /**
      * Current KOTC round.
@@ -61,9 +63,18 @@ class GameManager(
 
     private val kotcPlayers get() = kotcPlayerRegistry.players
 
+    private val gameStartHandler = GameStartHandler(this, waitingRoomManager, gameVoteHandler, scheduler)
+
+    fun startGameCountdown() {
+        gameStartHandler.startGameCountdown()
+    }
+
+    fun cancelGameCountdown() {
+        gameStartHandler.cancelGameCountdown()
+    }
+
     fun startGame() {
-        waitingRoomManager.preventNonAuthorizedConnections()
-        gameVoteHandler.startGameVote()
+        gameStartHandler.startGame()
     }
 
     /**
@@ -152,6 +163,12 @@ class GameManager(
 
         kotcPlayer?.crownHolder = true
     }
+
+//    private class GameStartHandler(private val scheduler: BukkitScheduler) {
+//        fun startGameCountdown() {
+//
+//        }
+//    }
 
     companion object {
         const val MAX_ROUNDS = 3

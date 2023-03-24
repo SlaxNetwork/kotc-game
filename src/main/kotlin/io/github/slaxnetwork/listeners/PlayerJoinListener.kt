@@ -1,9 +1,12 @@
 package io.github.slaxnetwork.listeners
 
+import io.github.slaxnetwork.KOTCGame
+import io.github.slaxnetwork.bukkitcore.scoreboard.ScoreboardManager
 import io.github.slaxnetwork.events.KOTCPlayerReconnectEvent
 import io.github.slaxnetwork.game.GameManager
 import io.github.slaxnetwork.game.microgame.death.RespawnableMicroGame
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
+import io.github.slaxnetwork.scoreboard.TestScoreboard
 import io.github.slaxnetwork.waitingroom.WaitingRoomManager
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -12,7 +15,8 @@ import org.bukkit.event.player.PlayerJoinEvent
 class PlayerJoinListener(
     private val kotcPlayerRegistry: KOTCPlayerRegistry,
     private val gameManager: GameManager,
-    private val waitingRoomManager: WaitingRoomManager
+    private val waitingRoomManager: WaitingRoomManager,
+    private val scoreboardManager: ScoreboardManager
 ) : Listener {
     @EventHandler
     fun onPlayerJoin(ev: PlayerJoinEvent) {
@@ -29,6 +33,28 @@ class PlayerJoinListener(
 
         if(!gameManager.hasGameStarted) {
             waitingRoomManager.teleport(ev.player)
+
+            kotcPlayerRegistry.findByUUID(ev.player.uniqueId)?.let {
+                scoreboardManager.setBoard(ev.player, TestScoreboard(it.profile))
+                scoreboardManager.updateLine(ev.player, 1)
+            }
+        }
+    }
+
+    @EventHandler
+    fun onCheckGameStartable(ev: PlayerJoinEvent) {
+        if(gameManager.hasGameStarted) {
+            return
+        }
+
+        val playerSize = kotcPlayerRegistry.players.size
+
+        if(playerSize >= WaitingRoomManager.MAX_PLAYERS) {
+            // start
+        }
+
+        if(playerSize >= WaitingRoomManager.MIN_PLAYERS_TO_START) {
+            // start countdown
         }
     }
 

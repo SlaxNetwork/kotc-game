@@ -80,7 +80,7 @@ abstract class MicroGame<Player : MicroGamePlayer> (
                     state = MicroGameState.IN_GAME
                 }
             },
-            20L, 20L
+            0L, 20L
         )
     }
 

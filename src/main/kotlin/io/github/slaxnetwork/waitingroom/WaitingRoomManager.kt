@@ -1,14 +1,15 @@
 package io.github.slaxnetwork.waitingroom
 
+import io.github.slaxnetwork.bukkitcore.scoreboard.ScoreboardManager
 import io.github.slaxnetwork.config.injectConfig
 import io.github.slaxnetwork.config.types.WaitingRoomConfig
 import org.bukkit.Location
 import org.bukkit.entity.Player
 
-class WaitingRoomManager {
+class WaitingRoomManager(
+    private val scoreboardManager: ScoreboardManager
+) {
     private val waitingRoomConfig by injectConfig<WaitingRoomConfig>()
-
-    private val voteHandler = WaitingRoomVoteHandler()
 
     private val spawnPoint: Location
         get() = waitingRoomConfig.spawnPoint.toBukkitLocation(waitingRoomConfig.worldName)
@@ -23,7 +24,6 @@ class WaitingRoomManager {
     }
 
     fun startGameVote() {
-
     }
 
     fun setWorldBorder() {

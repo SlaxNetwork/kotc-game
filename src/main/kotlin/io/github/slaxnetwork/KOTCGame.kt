@@ -3,24 +3,29 @@ package io.github.slaxnetwork
 import com.comphenix.protocol.ProtocolLibrary
 import com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin
 import io.github.slaxnetwork.bukkitcore.BukkitCoreAPI
-import io.github.slaxnetwork.commands.debug.DebugEndGameCommand
-import io.github.slaxnetwork.commands.debug.ShowTestTitleCommand
-import io.github.slaxnetwork.commands.debug.TestRunCommand
+import io.github.slaxnetwork.bukkitcore.scoreboard.ScoreboardManager
+import io.github.slaxnetwork.commands.debug.*
+import io.github.slaxnetwork.commands.player.VoteCommand
 import io.github.slaxnetwork.config.loadInjectableResources
 import io.github.slaxnetwork.game.GameManager
-import io.github.slaxnetwork.game.GameVoteHandler
+import io.github.slaxnetwork.game.vote.GameVoteHandler
 import io.github.slaxnetwork.game.microgame.maps.MapManager
 import io.github.slaxnetwork.listeners.PlayerDeathListener
 import io.github.slaxnetwork.listeners.PlayerJoinListener
 import io.github.slaxnetwork.listeners.PlayerQuitListener
 import io.github.slaxnetwork.listeners.kotc.KOTCPlayerConnectionListeners
 import io.github.slaxnetwork.listeners.kotc.KOTCPlayerCrownListeners
+import io.github.slaxnetwork.listeners.vote.GameVoteConcludeListener
+import io.github.slaxnetwork.listeners.vote.GameVoteStartedListener
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
 import io.github.slaxnetwork.waitingroom.WaitingRoomManager
 import net.kyori.adventure.text.minimessage.MiniMessage
 
 class KOTCGame : SuspendingJavaPlugin() {
     lateinit var bukkitCore: BukkitCoreAPI
+        private set
+
+    lateinit var scoreboardManager: ScoreboardManager
         private set
 
     lateinit var kotcPlayerRegistry: KOTCPlayerRegistry
@@ -46,6 +51,9 @@ class KOTCGame : SuspendingJavaPlugin() {
         bukkitCore = BukkitCoreAPI.get(server.servicesManager)
             ?: throw RuntimeException("bukkit-core was unable to be loaded.")
 
+        scoreboardManager = ScoreboardManager.get(server.servicesManager)
+            ?: throw RuntimeException("scoreboard manager was unable to be loaded.")
+
         mm = bukkitCore.getBaseMiniMessageBuilder()
             .build()
 
@@ -54,10 +62,10 @@ class KOTCGame : SuspendingJavaPlugin() {
         mapManager = MapManager()
         mapManager.initialize()
 
-        waitingRoomManager = WaitingRoomManager()
+        waitingRoomManager = WaitingRoomManager(scoreboardManager)
 
-        gameManager = GameManager(kotcPlayerRegistry, waitingRoomManager, mapManager, server.scheduler, server.pluginManager)
-        gameVoteHandler = GameVoteHandler(gameManager, server.scheduler)
+        gameVoteHandler = GameVoteHandler(server.scheduler)
+        gameManager = GameManager(kotcPlayerRegistry, waitingRoomManager, mapManager, server.scheduler, server.pluginManager, gameVoteHandler)
 
         registerCommands()
         registerListeners()
@@ -70,17 +78,24 @@ class KOTCGame : SuspendingJavaPlugin() {
         getCommand("test")?.setExecutor(TestRunCommand(this))
         getCommand("endgame")?.setExecutor(DebugEndGameCommand(gameManager, bukkitCore.profileRegistry))
         getCommand("showtesttitle")?.setExecutor(ShowTestTitleCommand())
+        getCommand("concludevote")?.setExecutor(DebugConcludeVoteCommand(bukkitCore.profileRegistry, gameVoteHandler))
+        getCommand("startvote")?.setExecutor(DebugStartGameVoteCommand(bukkitCore.profileRegistry, gameVoteHandler))
+        getCommand("vote")?.setExecutor(VoteCommand(gameManager, gameVoteHandler, bukkitCore.profileRegistry))
+        getCommand("sbtest")?.setExecutor(DebugScoreboardTestCommand(bukkitCore.profileRegistry))
     }
 
     private fun registerListeners() {
         // non-suspending listeners.
         setOf(
-            PlayerJoinListener(kotcPlayerRegistry, gameManager, waitingRoomManager),
+            PlayerJoinListener(kotcPlayerRegistry, gameManager, waitingRoomManager, scoreboardManager),
             PlayerQuitListener(kotcPlayerRegistry, gameManager),
             PlayerDeathListener(kotcPlayerRegistry, gameManager),
 
             KOTCPlayerConnectionListeners(gameManager, kotcPlayerRegistry),
-            KOTCPlayerCrownListeners(gameManager.rubiesHandler)
+            KOTCPlayerCrownListeners(gameManager.rubiesHandler),
+
+            GameVoteConcludeListener(kotcPlayerRegistry, gameManager),
+            GameVoteStartedListener(kotcPlayerRegistry)
         ).forEach { server.pluginManager.registerEvents(it, this) }
     }
 
