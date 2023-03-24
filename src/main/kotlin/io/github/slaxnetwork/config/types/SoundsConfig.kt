@@ -1,6 +1,6 @@
 package io.github.slaxnetwork.config.types
 
-import io.github.slaxnetwork.bukkitcommon.config.model.ConfigSoundModel
+import io.github.slaxnetwork.bukkitcore.utilities.config.model.ConfigSoundModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

@@ -1,7 +1,7 @@
 package io.github.slaxnetwork.config.types
 
-import io.github.slaxnetwork.bukkitcommon.config.model.ConfigBorderModel
-import io.github.slaxnetwork.bukkitcommon.config.model.ConfigLocationModel
+import io.github.slaxnetwork.bukkitcore.utilities.config.model.ConfigBorderModel
+import io.github.slaxnetwork.bukkitcore.utilities.config.model.ConfigLocationModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

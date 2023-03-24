@@ -7,6 +7,7 @@ import io.github.slaxnetwork.game.GameManager
 import io.github.slaxnetwork.game.microgame.death.RespawnableMicroGame
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
 import io.github.slaxnetwork.scoreboard.TestScoreboard
+import io.github.slaxnetwork.scoreboard.WaitingRoomScoreboard
 import io.github.slaxnetwork.waitingroom.WaitingRoomManager
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -26,6 +27,9 @@ class PlayerJoinListener(
         // reconnect.
         if(kotcPlayer != null) {
             kotcPlayer.connected = true
+
+//            val fb = scoreboardManager.setBoard(ev.player, WaitingRoomScoreboard(kotcPlayer.profile))
+
             return
         }
 
@@ -34,10 +38,10 @@ class PlayerJoinListener(
         if(!gameManager.hasGameStarted) {
             waitingRoomManager.teleport(ev.player)
 
-            kotcPlayerRegistry.findByUUID(ev.player.uniqueId)?.let {
-                scoreboardManager.setBoard(ev.player, TestScoreboard(it.profile))
-                scoreboardManager.updateLine(ev.player, 1)
-            }
+            val kP = kotcPlayerRegistry.findByUUID(ev.player.uniqueId)
+                ?: return
+
+            val fb = scoreboardManager.setBoard(ev.player, WaitingRoomScoreboard(kP.profile))
         }
     }
 

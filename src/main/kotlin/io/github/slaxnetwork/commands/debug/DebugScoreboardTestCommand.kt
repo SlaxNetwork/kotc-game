@@ -3,7 +3,6 @@ package io.github.slaxnetwork.commands.debug
 import io.github.slaxnetwork.KOTCGame
 import io.github.slaxnetwork.bukkitcore.minimessage.tags.LanguageTags
 import io.github.slaxnetwork.bukkitcore.profile.ProfileRegistry
-import io.github.slaxnetwork.bukkitcore.scoreboard.BoardLine
 import io.github.slaxnetwork.bukkitcore.scoreboard.ScoreboardManager
 import io.github.slaxnetwork.game.microgame.MicroGameType
 import io.github.slaxnetwork.mm

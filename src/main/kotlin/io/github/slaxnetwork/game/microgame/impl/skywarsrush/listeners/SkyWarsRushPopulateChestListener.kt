@@ -1,7 +1,7 @@
 package io.github.slaxnetwork.game.microgame.impl.skywarsrush.listeners
 
 import io.github.slaxnetwork.KOTCLogger
-import io.github.slaxnetwork.bukkitcommon.config.injectConfig
+import io.github.slaxnetwork.bukkitcore.utilities.config.injectConfig
 import io.github.slaxnetwork.config.model.skywars.ConfigSkyWarsLootTableModel
 import io.github.slaxnetwork.config.types.game.ConfigSkyWarsMapModel
 import io.github.slaxnetwork.config.types.game.SkyWarsRushConfig

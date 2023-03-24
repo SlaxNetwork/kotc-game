@@ -1,7 +1,7 @@
 package io.github.slaxnetwork.waitingroom
 
-import io.github.slaxnetwork.bukkitcommon.config.injectConfig
 import io.github.slaxnetwork.bukkitcore.scoreboard.ScoreboardManager
+import io.github.slaxnetwork.bukkitcore.utilities.config.injectConfig
 import io.github.slaxnetwork.config.types.WaitingRoomConfig
 import org.bukkit.Location
 import org.bukkit.entity.Player

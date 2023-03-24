@@ -21,8 +21,8 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
 
     compileOnly("io.github.slaxnetwork:bukkit-core-api:0.0.1")
+    implementation("io.github.slaxnetwork:bukkit-utilities:0.0.1")
     compileOnly("io.github.slaxnetwork:kyouko-wrapper:0.0.1")
-    implementation("io.github.slaxnetwork:bukkit-common:0.0.1")
 
     compileOnly("com.comphenix.protocol:ProtocolLib:4.7.0")
 
@@ -32,8 +32,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0-Beta")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.10")
 
-    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.11.0")
-    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.11.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.11.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.11.0")
 }
 
 java {
