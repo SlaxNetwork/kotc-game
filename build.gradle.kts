@@ -1,11 +1,10 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     kotlin("jvm") version "1.8.10"
     kotlin("plugin.serialization") version "1.8.10"
 
     id("net.minecrell.plugin-yml.bukkit") version "0.5.2"
-    id("com.github.johnrengelman.shadow") version "7.1.2"}
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+}
 
 group = "io.github.slaxnetwork"
 version = "0.0.1"
