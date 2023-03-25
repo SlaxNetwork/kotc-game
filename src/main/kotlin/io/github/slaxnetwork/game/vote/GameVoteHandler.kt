@@ -35,8 +35,8 @@ class GameVoteHandler(private val scheduler: BukkitScheduler) {
         startGameVoteTimer()
     }
 
-    fun submitVote(uuid: UUID, type: MicroGameType) {
-        votes.add(GameVote(uuid, type))
+    fun submitVote(uuid: UUID, type: MicroGameType): Boolean {
+        return votes.add(GameVote(uuid, type))
     }
 
     private fun startGameVoteTimer() {
@@ -70,9 +70,4 @@ class GameVoteHandler(private val scheduler: BukkitScheduler) {
         votes.clear()
         gameVotePool.clear()
     }
-
-    private data class Vote(
-        val uuid: UUID,
-        val game: MicroGameType
-    )
 }

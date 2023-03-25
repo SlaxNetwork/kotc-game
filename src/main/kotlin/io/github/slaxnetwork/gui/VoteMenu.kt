@@ -1,13 +1,13 @@
 package io.github.slaxnetwork.gui
 
 import io.github.slaxnetwork.KOTCGame
+import io.github.slaxnetwork.bukkitcore.minimessage.tags.LanguageTags
 import io.github.slaxnetwork.game.vote.GameVoteHandler
 import io.github.slaxnetwork.kyouko.models.profile.Profile
 import io.github.slaxnetwork.mm
 import me.tech.mcchestui.GUIType
 import me.tech.mcchestui.gui
 import me.tech.mcchestui.item
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import org.bukkit.Material
 
 class VoteMenu(
@@ -16,11 +16,17 @@ class VoteMenu(
 ) {
     fun get() = gui(
         KOTCGame.get(),
-        mm.deserialize("<aqua>diamonds"),
+        mm.deserialize("<text>", LanguageTags.translateText("menu.vote.title", profile)),
         GUIType.CHEST,
         3
     ) {
         for((index, game) in gameVoteHandler.gameVotePool.withIndex()) {
+            val translateKey = "menu.vote.games.${game.name.lowercase()}"
+
+            val itemName = mm.deserialize("<text>", LanguageTags.translateText("${translateKey}.name", profile))
+            val itemLore = mm.deserialize("<text>", LanguageTags.translateText("${translateKey}.description", profile))
+                .children()
+
             val xAxis = setOf(
                 0 + (3 * index),
                 1 + (3 * index),
@@ -39,12 +45,12 @@ class VoteMenu(
 
                     slot(x, y) {
                         item = item(testMaterial) {
-                            name = mm.deserialize("<aqua><game_name>", Placeholder.unparsed("game_name", game.name))
-
+                            name = itemName
+                            lore = itemLore
                         }
+
                         onClick = {
                             gameVoteHandler.submitVote(it.uniqueId, game)
-
                             it.closeInventory()
                         }
                     }

@@ -46,7 +46,7 @@ dependencies {
     // loaded via bukkit-core
     compileOnly("io.github.slaxnetwork:kyouko-wrapper:0.0.3")
 
-    implementation("me.tech:mc-chestui-plus:0.0.2")
+    implementation("me.tech:mc-chestui-plus:0.0.4")
 
     compileOnly("com.comphenix.protocol:ProtocolLib:4.7.0")
 

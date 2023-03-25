@@ -24,6 +24,7 @@ class WaitingRoomManager(
     }
 
     fun startGameVote() {
+
     }
 
     fun setWorldBorder() {
