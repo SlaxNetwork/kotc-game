@@ -2,6 +2,8 @@ package io.github.slaxnetwork.game
 
 import io.github.slaxnetwork.KOTCGame
 import io.github.slaxnetwork.KOTCLogger
+import io.github.slaxnetwork.bukkitcore.utilities.config.injectConfig
+import io.github.slaxnetwork.config.types.Config
 import io.github.slaxnetwork.game.vote.GameVoteHandler
 import io.github.slaxnetwork.mm
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
@@ -18,6 +20,8 @@ class GameStartHandler(
     private val gameVoteHandler: GameVoteHandler,
     private val scheduler: BukkitScheduler
 ) {
+    private val config by injectConfig<Config>()
+
     private var startGameCountdownTask: BukkitTask? = null
 
     // :D
@@ -101,7 +105,7 @@ class GameStartHandler(
             "<white><countdown> <gray>| <white><player_total><gray>/<white><max_players>",
             Placeholder.unparsed("countdown", countdown.toString()),
             Placeholder.unparsed("player_total", bukkitPlayers.size.toString()),
-            Placeholder.unparsed("max_players", WaitingRoomManager.MAX_PLAYERS.toString())
+            Placeholder.unparsed("max_players", config.game.start.maximum.toString())
         )
 
         if(bossBar == null) {

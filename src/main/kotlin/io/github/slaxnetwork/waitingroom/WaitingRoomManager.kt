@@ -36,9 +36,4 @@ class WaitingRoomManager(
         border.damageAmount = damage
         border.damageBuffer = damageBuffer
     }
-
-    companion object {
-        const val MIN_PLAYERS_TO_START = 1
-        const val MAX_PLAYERS = 1
-    }
 }
