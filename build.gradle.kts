@@ -21,30 +21,19 @@ repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.dmulloy2.net/repository/public/")
 
-    maven {
-        name = "GitHubPackages"
-        url = uri("https://maven.pkg.github.com/SlaxNetwork/kyouko-kt-wrapper")
-        credentials {
-            username = githubActor
-            password = githubToken
-        }
-    }
-
-    maven {
-        name = "GitHubPackages"
-        url = uri("https://maven.pkg.github.com/bukkit-core")
-        credentials {
-            username = githubActor
-            password = githubToken
-        }
-    }
-
-    maven {
-        name = "GitHubPackages"
-        url = uri("https://maven.pkg.github.com/mc-chestui-plus")
-        credentials {
-            username = githubActor
-            password = githubToken
+    // github packages
+    setOf(
+        "SlaxNetwork/kyouko-kt-wrapper",
+        "SlaxNetwork/bukkit-core",
+        "SlaxNetwork/mc-chestui-plus"
+    ).forEach {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/$it")
+            credentials {
+                username = githubActor
+                password = githubToken
+            }
         }
     }
 }
@@ -53,7 +42,7 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
 
     compileOnly("io.github.slaxnetwork:bukkit-core-api:0.0.1")
-    implementation("io.github.slaxnetwork:bukkit-utilities:0.0.1")
+    implementation("io.github.slaxnetwork:bukkit-utilities:0.0.2")
     // loaded via bukkit-core
     compileOnly("io.github.slaxnetwork:kyouko-wrapper:0.0.1")
 
