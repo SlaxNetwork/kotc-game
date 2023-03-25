@@ -1,5 +1,11 @@
 {
   "logging": {
     "debug": true
+  },
+  "game": {
+    "start": {
+      "minimum": 3,
+      "maximum": 12
+    }
   }
 }

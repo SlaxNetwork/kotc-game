@@ -2,6 +2,8 @@ package io.github.slaxnetwork.listeners
 
 import io.github.slaxnetwork.KOTCLogger
 import io.github.slaxnetwork.bukkitcore.scoreboard.ScoreboardManager
+import io.github.slaxnetwork.bukkitcore.utilities.config.injectConfig
+import io.github.slaxnetwork.config.types.Config
 import io.github.slaxnetwork.events.KOTCPlayerReconnectEvent
 import io.github.slaxnetwork.game.GameManager
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
@@ -16,6 +18,8 @@ class PlayerJoinListener(
     private val waitingRoomManager: WaitingRoomManager,
     private val scoreboardManager: ScoreboardManager
 ) : Listener {
+    private val config by injectConfig<Config>()
+
     @EventHandler
     fun onPlayerJoin(ev: PlayerJoinEvent) {
         val uuid = ev.player.uniqueId
@@ -45,11 +49,13 @@ class PlayerJoinListener(
         val playerSize = kotcPlayerRegistry.players.size
         KOTCLogger.debug("game-start", "player size is $playerSize.")
 
-        if(playerSize >= WaitingRoomManager.MAX_PLAYERS) {
+        val (minimumPlayers, maximumPlayers) = config.game.start
+
+        if(playerSize >= maximumPlayers) {
             KOTCLogger.debug("game-start", "Using fast start.")
             // Fast start.
             gameManager.startGameCountdown(slow = false)
-        } else if(playerSize >= WaitingRoomManager.MIN_PLAYERS_TO_START) {
+        } else if(playerSize >= minimumPlayers) {
             KOTCLogger.debug("game-start", "Using slow start.")
             // Slow start.
             gameManager.startGameCountdown(slow = true)
