@@ -5,6 +5,8 @@ import com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin
 import io.github.slaxnetwork.bukkitcore.BukkitCoreAPI
 import io.github.slaxnetwork.bukkitcore.profile.ProfileRegistry
 import io.github.slaxnetwork.bukkitcore.scoreboard.ScoreboardManager
+import io.github.slaxnetwork.bukkitcore.utilities.config.injectConfig
+import io.github.slaxnetwork.bukkitcore.utilities.config.loadConfig
 import io.github.slaxnetwork.bukkitcore.utilities.config.loadInjectableResources
 import io.github.slaxnetwork.commands.debug.*
 import io.github.slaxnetwork.commands.player.VoteCommand
@@ -52,12 +54,14 @@ class KOTCGame : SuspendingJavaPlugin() {
         private set
 
     override suspend fun onLoadAsync() {
+        loadConfig(this, Config::class, false)
+        val config by injectConfig<Config>()
+
         loadInjectableResources(this, mapOf(
-            "config.json" to Config::class,
             "sounds.json" to SoundsConfig::class,
             "waiting_room.json" to WaitingRoomConfig::class,
             "skywars.json" to SkyWarsRushConfig::class
-        ))
+        ), config.debug.configOverride)
     }
 
     override suspend fun onEnableAsync() {

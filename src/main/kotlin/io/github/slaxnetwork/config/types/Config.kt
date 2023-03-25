@@ -1,15 +1,18 @@
 package io.github.slaxnetwork.config.types
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class Config(
-    val logging: Logging,
+    val debug: Debug,
     val game: Game
 ) {
     @Serializable
-    data class Logging(
-        val debug: Boolean
+    data class Debug(
+        @SerialName("config_override")
+        val configOverride: Boolean,
+        val logging: Boolean
     )
 
     @Serializable

@@ -23,7 +23,7 @@ object KOTCLogger {
     }
 
     fun debug(prefix: String, message: String) {
-        if(config.logging.debug) {
+        if(config.debug.logging) {
             logger.info("[debug-$prefix] $message")
         }
     }

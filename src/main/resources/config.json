@@ -1,6 +1,7 @@
 {
-  "logging": {
-    "debug": true
+  "debug": {
+    "config_override": false,
+    "logging": true
   },
   "game": {
     "start": {
