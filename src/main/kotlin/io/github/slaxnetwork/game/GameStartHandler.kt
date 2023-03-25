@@ -39,11 +39,11 @@ class GameStartHandler(
         KOTCLogger.debug("game-start", "Starting runnable.")
 
         startGameCountdownTask = scheduler.runTaskTimer(KOTCGame.get(), Runnable {
-            KOTCLogger.debug("game-start", "Ticking game start countdown, ${countdown - 1}.")
-
             updateBossBar()
+
             if(countdown-- == 0) {
                 startGame()
+                countdown = -1
             }
         }, 20L, 20L)
     }
@@ -89,7 +89,6 @@ class GameStartHandler(
             it.cancel()
             startGameCountdownTask = null
         }
-        countdown = -1
         hideBossBar()
 
         waitingRoomManager.preventNonAuthorizedConnections()

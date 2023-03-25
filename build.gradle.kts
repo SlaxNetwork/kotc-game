@@ -41,12 +41,12 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
 
-    compileOnly("io.github.slaxnetwork:bukkit-core-api:0.0.1")
-    implementation("io.github.slaxnetwork:bukkit-utilities:0.0.2")
+    compileOnly("io.github.slaxnetwork:bukkit-core-api:0.0.2")
+    implementation("io.github.slaxnetwork:bukkit-utilities:0.0.3")
     // loaded via bukkit-core
-    compileOnly("io.github.slaxnetwork:kyouko-wrapper:0.0.1")
+    compileOnly("io.github.slaxnetwork:kyouko-wrapper:0.0.3")
 
-    implementation("me.tech:mc-chestui-plus:0.0.1")
+    implementation("me.tech:mc-chestui-plus:0.0.2")
 
     compileOnly("com.comphenix.protocol:ProtocolLib:4.7.0")
 
