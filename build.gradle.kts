@@ -1,11 +1,13 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     kotlin("jvm") version "1.8.10"
     kotlin("plugin.serialization") version "1.8.10"
 
     id("net.minecrell.plugin-yml.bukkit") version "0.5.2"
-    id("com.github.johnrengelman.shadow") version "7.1.2"}
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+}
+
+val githubActor = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_ACTOR")
+val githubToken = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
 
 group = "io.github.slaxnetwork"
 version = "0.0.1"
@@ -15,6 +17,33 @@ repositories {
     mavenLocal()
 
     maven("https://repo.purpurmc.org/snapshots")
+
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/SlaxNetwork/kyouko-kt-wrapper")
+        credentials {
+            username = githubActor
+            password = githubToken
+        }
+    }
+
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/bukkit-core")
+        credentials {
+            username = githubActor
+            password = githubToken
+        }
+    }
+
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/mc-chestui-plus")
+        credentials {
+            username = githubActor
+            password = githubToken
+        }
+    }
 }
 
 dependencies {
@@ -23,7 +52,7 @@ dependencies {
     compileOnly("io.github.slaxnetwork:bukkit-core:0.0.1")
     compileOnly("io.github.slaxnetwork:kyouko-wrapper:0.0.1")
 
-    implementation("me.tech:chestuiplus:1.0.0")
+    implementation("me.tech:mc-chestui-plus:0.0.1")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
