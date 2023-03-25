@@ -6,7 +6,7 @@ import io.github.slaxnetwork.game.GameManager
 import io.github.slaxnetwork.game.vote.GameVoteHandler
 import io.github.slaxnetwork.gui.VoteMenu
 import io.github.slaxnetwork.mm
-import me.tech.chestuiplus.openGUI
+import me.tech.mcchestui.openGUI
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender

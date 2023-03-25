@@ -4,9 +4,9 @@ import io.github.slaxnetwork.KOTCGame
 import io.github.slaxnetwork.game.vote.GameVoteHandler
 import io.github.slaxnetwork.kyouko.models.profile.Profile
 import io.github.slaxnetwork.mm
-import me.tech.chestuiplus.GUIType
-import me.tech.chestuiplus.gui
-import me.tech.chestuiplus.item
+import me.tech.mcchestui.GUIType
+import me.tech.mcchestui.gui
+import me.tech.mcchestui.item
 import net.kyori.adventure.text.Component
 import org.bukkit.Material
 
