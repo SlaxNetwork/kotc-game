@@ -47,7 +47,7 @@ class GameManager(
      * Whether the KOTC Game has started.
      */
     val hasGameStarted: Boolean
-        get() = round > 0
+        get() = round != 0
 
     val microGameState: MicroGameState
         get() = currentMicroGame?.state ?: MicroGameState.NOT_RUNNING
@@ -63,10 +63,18 @@ class GameManager(
 
     private val kotcPlayers get() = kotcPlayerRegistry.players
 
-    private val gameStartHandler = GameStartHandler(this, waitingRoomManager, gameVoteHandler, scheduler)
+    private val gameStartHandler = GameStartHandler(kotcPlayerRegistry, this, waitingRoomManager, gameVoteHandler, scheduler)
 
-    fun startGameCountdown() {
-        gameStartHandler.startGameCountdown()
+    fun startGameCountdown(slow: Boolean) {
+        if(hasGameStarted) {
+            return
+        }
+
+        if(slow) {
+            gameStartHandler.startSlowGameCountdown()
+        } else {
+            gameStartHandler.startFastGameCountdown()
+        }
     }
 
     fun cancelGameCountdown() {

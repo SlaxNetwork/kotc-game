@@ -1,14 +1,18 @@
 package io.github.slaxnetwork.game
 
 import io.github.slaxnetwork.KOTCGame
-import io.github.slaxnetwork.game.microgame.MicroGameState
+import io.github.slaxnetwork.KOTCLogger
 import io.github.slaxnetwork.game.vote.GameVoteHandler
+import io.github.slaxnetwork.mm
+import io.github.slaxnetwork.player.KOTCPlayerRegistry
 import io.github.slaxnetwork.waitingroom.WaitingRoomManager
+import net.kyori.adventure.bossbar.BossBar
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import org.bukkit.scheduler.BukkitScheduler
 import org.bukkit.scheduler.BukkitTask
-import java.util.function.Consumer
 
 class GameStartHandler(
+    private val kotcPlayerRegistry: KOTCPlayerRegistry,
     private val gameManager: GameManager,
     private val waitingRoomManager: WaitingRoomManager,
     private val gameVoteHandler: GameVoteHandler,
@@ -16,22 +20,54 @@ class GameStartHandler(
 ) {
     private var startGameCountdownTask: BukkitTask? = null
 
-    private var countdown = 30
+    // :D
+    private var countdown: Int = -1
 
-    fun startGameCountdown() {
+//    private val bossBarMap = mutableMapOf<UUID, BossBar>()
+    private var bossBar: BossBar? = null
+
+    private fun startGameCountdown() {
         if(startGameCountdownTask != null) {
+            KOTCLogger.debug("game-start", "startGameCountdown task is not null.")
             return
         }
 
-        val runnable = Runnable {
-            if(countdown-- != 0) {
-                return@Runnable
+        KOTCLogger.debug("game-start", "Starting runnable.")
+
+        startGameCountdownTask = scheduler.runTaskTimer(KOTCGame.get(), Runnable {
+            KOTCLogger.debug("game-start", "Ticking game start countdown, ${countdown - 1}.")
+
+            updateBossBar()
+            if(countdown-- == 0) {
+                startGame()
             }
+        }, 20L, 20L)
+    }
 
-            startGame()
+    fun startSlowGameCountdown() {
+        if(countdown == -1) {
+            countdown = SLOW_COUNTDOWN
+            startGameCountdown()
+        } else {
+            if(SLOW_COUNTDOWN > countdown) {
+                return
+            }
+            countdown = SLOW_COUNTDOWN
+            startGameCountdown()
         }
+    }
 
-        startGameCountdownTask = scheduler.runTaskTimer(KOTCGame.get(), runnable, 0L, 20L)
+    fun startFastGameCountdown() {
+        if(countdown == -1) {
+            countdown = FAST_COUNTDOWN
+            startGameCountdown()
+        } else {
+            if(FAST_COUNTDOWN > countdown) {
+                return
+            }
+            countdown = FAST_COUNTDOWN
+            startGameCountdown()
+        }
     }
 
     fun cancelGameCountdown() {
@@ -39,15 +75,62 @@ class GameStartHandler(
             it.cancel()
             startGameCountdownTask = null
         }
+        countdown = -1
+        hideBossBar()
     }
 
     fun startGame() {
+        KOTCLogger.debug("game-start", "Attempting to start the game.")
         startGameCountdownTask?.let {
             it.cancel()
             startGameCountdownTask = null
         }
+        countdown = -1
+        hideBossBar()
 
         waitingRoomManager.preventNonAuthorizedConnections()
         gameVoteHandler.startGameVote()
+    }
+
+    private fun updateBossBar() {
+        val bukkitPlayers = kotcPlayerRegistry.players
+            .mapNotNull { it.bukkitPlayer }
+
+        // if we add text put this in the loop so we can translate it.
+        val text = mm.deserialize(
+            "<white><countdown> <gray>| <white><player_total><gray>/<white><max_players>",
+            Placeholder.unparsed("countdown", countdown.toString()),
+            Placeholder.unparsed("player_total", bukkitPlayers.size.toString()),
+            Placeholder.unparsed("max_players", WaitingRoomManager.MAX_PLAYERS.toString())
+        )
+
+        if(bossBar == null) {
+            bossBar = BossBar.bossBar(
+                text,
+                1.0f,
+                BossBar.Color.WHITE,
+                BossBar.Overlay.PROGRESS
+            )
+        } else {
+            bossBar?.name(text)
+        }
+
+        for(bukkitPlayer in bukkitPlayers) {
+            bukkitPlayer.showBossBar(bossBar ?: continue)
+        }
+    }
+
+    private fun hideBossBar() {
+        val bukkitPlayers = kotcPlayerRegistry.players
+            .mapNotNull { it.bukkitPlayer }
+
+        for(bukkitPlayer in bukkitPlayers) {
+            bukkitPlayer.hideBossBar(bossBar ?: continue)
+        }
+    }
+
+    companion object {
+        private const val SLOW_COUNTDOWN = 60 * 2
+        private const val FAST_COUNTDOWN = 15
     }
 }

@@ -38,7 +38,7 @@ class WaitingRoomManager(
     }
 
     companion object {
-        const val MIN_PLAYERS_TO_START = 3
-        const val MAX_PLAYERS = 12
+        const val MIN_PLAYERS_TO_START = 1
+        const val MAX_PLAYERS = 1
     }
 }

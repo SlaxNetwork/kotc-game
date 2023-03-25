@@ -1,13 +1,10 @@
 package io.github.slaxnetwork.listeners
 
-import io.github.slaxnetwork.KOTCGame
+import io.github.slaxnetwork.KOTCLogger
 import io.github.slaxnetwork.bukkitcore.scoreboard.ScoreboardManager
 import io.github.slaxnetwork.events.KOTCPlayerReconnectEvent
 import io.github.slaxnetwork.game.GameManager
-import io.github.slaxnetwork.game.microgame.death.RespawnableMicroGame
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
-import io.github.slaxnetwork.scoreboard.TestScoreboard
-import io.github.slaxnetwork.scoreboard.WaitingRoomScoreboard
 import io.github.slaxnetwork.waitingroom.WaitingRoomManager
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -27,9 +24,6 @@ class PlayerJoinListener(
         // reconnect.
         if(kotcPlayer != null) {
             kotcPlayer.connected = true
-
-//            val fb = scoreboardManager.setBoard(ev.player, WaitingRoomScoreboard(kotcPlayer.profile))
-
             return
         }
 
@@ -37,28 +31,28 @@ class PlayerJoinListener(
 
         if(!gameManager.hasGameStarted) {
             waitingRoomManager.teleport(ev.player)
-
-            val kP = kotcPlayerRegistry.findByUUID(ev.player.uniqueId)
-                ?: return
-
-            val fb = scoreboardManager.setBoard(ev.player, WaitingRoomScoreboard(kP.profile))
         }
+
+        checkIfGameIsStartable()
     }
 
-    @EventHandler
-    fun onCheckGameStartable(ev: PlayerJoinEvent) {
+    private fun checkIfGameIsStartable() {
+        KOTCLogger.debug("game-start", "has game started, ${gameManager.hasGameStarted}")
         if(gameManager.hasGameStarted) {
             return
         }
 
         val playerSize = kotcPlayerRegistry.players.size
+        KOTCLogger.debug("game-start", "player size is $playerSize.")
 
         if(playerSize >= WaitingRoomManager.MAX_PLAYERS) {
-            // start
-        }
-
-        if(playerSize >= WaitingRoomManager.MIN_PLAYERS_TO_START) {
-            // start countdown
+            KOTCLogger.debug("game-start", "Using fast start.")
+            // Fast start.
+            gameManager.startGameCountdown(slow = false)
+        } else if(playerSize >= WaitingRoomManager.MIN_PLAYERS_TO_START) {
+            KOTCLogger.debug("game-start", "Using slow start.")
+            // Slow start.
+            gameManager.startGameCountdown(slow = true)
         }
     }
 

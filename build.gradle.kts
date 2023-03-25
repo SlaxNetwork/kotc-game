@@ -22,18 +22,20 @@ dependencies {
 
     compileOnly("io.github.slaxnetwork:bukkit-core-api:0.0.1")
     implementation("io.github.slaxnetwork:bukkit-utilities:0.0.1")
+    // loaded via bukkit-core
     compileOnly("io.github.slaxnetwork:kyouko-wrapper:0.0.1")
 
     compileOnly("com.comphenix.protocol:ProtocolLib:4.7.0")
 
     implementation("me.tech:chestuiplus:1.0.0")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0-Beta")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.10")
+    // loaded into jvm via bukkit-core
+    compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+    compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0-Beta")
+    compileOnly("org.jetbrains.kotlin:kotlin-reflect:1.8.10")
 
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.11.0")
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.11.0")
+    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.11.0")
+    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.11.0")
 }
 
 java {
@@ -62,5 +64,6 @@ bukkit {
         register("startvote")
         register("vote")
         register("sbtest")
+        register("swapsbtoggle")
     }
 }

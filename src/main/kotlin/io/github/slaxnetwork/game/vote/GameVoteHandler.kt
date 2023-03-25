@@ -3,6 +3,7 @@ package io.github.slaxnetwork.game.vote
 import io.github.slaxnetwork.KOTCGame
 import io.github.slaxnetwork.KOTCLogger
 import io.github.slaxnetwork.events.vote.GameVoteConcludeEvent
+import io.github.slaxnetwork.events.vote.GameVoteStartedEvent
 import io.github.slaxnetwork.game.microgame.MicroGameType
 import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitScheduler
@@ -28,6 +29,8 @@ class GameVoteHandler(private val scheduler: BukkitScheduler) {
 
         gameVotePool.addAll(games)
         KOTCLogger.debug("game-vote", "Added games $games to the vote pool.")
+
+        Bukkit.getPluginManager().callEvent(GameVoteStartedEvent())
 
         startGameVoteTimer()
     }

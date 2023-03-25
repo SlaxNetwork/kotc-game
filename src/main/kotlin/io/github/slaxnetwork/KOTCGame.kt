@@ -3,8 +3,8 @@ package io.github.slaxnetwork
 import com.comphenix.protocol.ProtocolLibrary
 import com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin
 import io.github.slaxnetwork.bukkitcore.BukkitCoreAPI
+import io.github.slaxnetwork.bukkitcore.profile.ProfileRegistry
 import io.github.slaxnetwork.bukkitcore.scoreboard.ScoreboardManager
-import io.github.slaxnetwork.bukkitcore.utilities.config.CONFIGURATION_CONTAINER
 import io.github.slaxnetwork.bukkitcore.utilities.config.loadInjectableResources
 import io.github.slaxnetwork.commands.debug.*
 import io.github.slaxnetwork.commands.player.VoteCommand
@@ -29,6 +29,9 @@ import net.kyori.adventure.text.minimessage.MiniMessage
 class KOTCGame : SuspendingJavaPlugin() {
     lateinit var bukkitCore: BukkitCoreAPI
         private set
+
+    private val profileRegistry: ProfileRegistry
+        get() = bukkitCore.profileRegistry
 
     lateinit var scoreboardManager: ScoreboardManager
         private set
@@ -55,7 +58,6 @@ class KOTCGame : SuspendingJavaPlugin() {
             "waiting_room.json" to WaitingRoomConfig::class,
             "skywars.json" to SkyWarsRushConfig::class
         ))
-        logger.info(CONFIGURATION_CONTAINER.toString())
     }
 
     override suspend fun onEnableAsync() {
@@ -93,6 +95,7 @@ class KOTCGame : SuspendingJavaPlugin() {
         getCommand("startvote")?.setExecutor(DebugStartGameVoteCommand(bukkitCore.profileRegistry, gameVoteHandler))
         getCommand("vote")?.setExecutor(VoteCommand(gameManager, gameVoteHandler, bukkitCore.profileRegistry))
         getCommand("sbtest")?.setExecutor(DebugScoreboardTestCommand(bukkitCore.profileRegistry))
+        getCommand("swapsbtoggle")?.setExecutor(DebugSwapScoreboardToggleCommand(bukkitCore.profileRegistry, scoreboardManager))
     }
 
     private fun registerListeners() {
