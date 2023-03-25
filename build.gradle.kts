@@ -15,6 +15,27 @@ repositories {
     mavenLocal()
 
     maven("https://repo.purpurmc.org/snapshots")
+
+    val githubActor = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_ACTOR")
+    val githubToken = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
+
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/SlaxNetwork/kyouko-kt-wrapper")
+        credentials {
+            username = githubActor
+            password = githubToken
+        }
+    }
+
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/bukkit-core")
+        credentials {
+            username = githubActor
+            password = githubToken
+        }
+    }
 }
 
 dependencies {
