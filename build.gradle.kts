@@ -55,7 +55,7 @@ dependencies {
     compileOnly("io.github.slaxnetwork:bukkit-core-api:0.0.1")
     implementation("io.github.slaxnetwork:bukkit-utilities:0.0.1")
     // loaded via bukkit-core
-    compileOnly("io.github.slaxnetwork:kyouko-wrapper:0.0.1"))
+    compileOnly("io.github.slaxnetwork:kyouko-wrapper:0.0.1")
 
     implementation("me.tech:mc-chestui-plus:0.0.1")
 
