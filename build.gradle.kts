@@ -55,7 +55,7 @@ dependencies {
     compileOnly("io.github.slaxnetwork:bukkit-core-api:0.0.1")
     implementation("io.github.slaxnetwork:bukkit-utilities:0.0.1")
     // loaded via bukkit-core
-    compileOnly("io.github.slaxnetwork:kyouko-wrapper:0.0.1")
+    compileOnly("io.github.slaxnetwork:kyouko-wrapper:0.0.1"))
 
     implementation("me.tech:mc-chestui-plus:0.0.1")
 
@@ -66,7 +66,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.10")
 
     compileOnly("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.11.0")
-    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.11.0")}
+    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.11.0")
+}
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
