@@ -1,4 +1,7 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+val bukkit_core_version: String by project
+val bukkit_utilities_version: String by project
+val kyouko_wrapper_version: String by project
+val chest_ui_version: String by project
 
 plugins {
     kotlin("jvm") version "1.8.10"
@@ -41,12 +44,12 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
 
-    compileOnly("io.github.slaxnetwork:bukkit-core-api:0.0.2")
-    implementation("io.github.slaxnetwork:bukkit-utilities:0.0.3")
+    compileOnly("io.github.slaxnetwork:bukkit-core-api:$bukkit_core_version")
+    implementation("io.github.slaxnetwork:bukkit-utilities:$bukkit_utilities_version")
     // loaded via bukkit-core
-    compileOnly("io.github.slaxnetwork:kyouko-wrapper:0.0.3")
+    compileOnly("io.github.slaxnetwork:kyouko-wrapper:$kyouko_wrapper_version")
 
-    implementation("me.tech:mc-chestui-plus:0.0.4")
+    implementation("me.tech:mc-chestui-plus:$chest_ui_version")
 
     compileOnly("com.comphenix.protocol:ProtocolLib:4.7.0")
 
