@@ -27,7 +27,6 @@ class GameStartHandler(
     // :D
     private var countdown: Int = -1
 
-//    private val bossBarMap = mutableMapOf<UUID, BossBar>()
     private var bossBar: BossBar? = null
 
     private fun startGameCountdown() {

@@ -54,17 +54,30 @@ class GameVoteHandler(private val scheduler: BukkitScheduler) {
             .eachCount()
             .entries.maxByOrNull { it.value }
 
-        if(winner == null) {
-            KOTCLogger.debug("game-vote", "Game vote concluded with no winner.")
-            throw NullPointerException("no game winner was decided upon when the game vote ended.")
+        var game: MicroGameType? = null
+
+        if(winner != null) {
+            KOTCLogger.debug("game-vote", "Standard game vote concluded with ${winner.key} winning.")
+
+            game = winner.key
+            val voteAmount = winner.value
+
+            Bukkit.getPluginManager().callEvent(GameVoteConcludeEvent(
+                game,
+                voteAmount
+            ))
+        // no winner was selected, pick random?
+        } else {
+            KOTCLogger.debug("game-vote", "No winner was able to be selected, selecting a random game.")
+
+            game = gameVotePool.randomOrNull()
+                ?: throw NullPointerException("no game was able to be selected since none are in the list.")
+
+            Bukkit.getPluginManager().callEvent(GameVoteConcludeEvent(
+                game,
+                0
+            ))
         }
-
-        val (game, voteAmount) = winner
-
-        Bukkit.getPluginManager().callEvent(GameVoteConcludeEvent(
-            game,
-            voteAmount
-        ))
 
         previouslyPlayed.add(game)
         votes.clear()
