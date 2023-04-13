@@ -1,45 +1,48 @@
 package io.github.slaxnetwork.game.microgame.maps
 
-import io.github.slaxnetwork.utils.toBukkitLocation
+import io.github.slaxnetwork.config.model.map.BaseMapConfig
+import io.github.slaxnetwork.game.microgame.team.KOTCTeam
 import org.bukkit.Location
 import org.bukkit.World
-import org.bukkit.configuration.ConfigurationSection
+import java.util.*
 
 abstract class MicroGameMap(
     val id: String,
-    private val mapSection: ConfigurationSection
+    private val mapConfig: BaseMapConfig
 ) {
-    val spawnPoints: Set<Location> = getSpawnPointsFromConfig()
-
-    val center: Location = mapSection.getConfigurationSection("center")
-        ?.toBukkitLocation()
+    val center: Location = mapConfig.center
+        .toBukkitLocation()
         ?: throw IllegalArgumentException("Map $id doesn't have a center point set in config.")
 
-    private val world: World
+    val spectatorSpawnPoint: Location = mapConfig.spectatorSpawnPoint
+        .toBukkitLocation()
+        ?: throw IllegalArgumentException("Map $id doesn't have a spectator spawn point set in config.")
+
+    private val _teamSpawnPoints = mutableMapOf<KOTCTeam, MutableList<Location>>()
+    val teamSpawnPoints: Map<KOTCTeam, List<Location>>
+        get() = Collections.unmodifiableMap(_teamSpawnPoints)
+
+    private val _allSpawnPoints = mutableListOf<Location>()
+    val allSpawnPoints: List<Location>
+        get() = Collections.unmodifiableList(_allSpawnPoints)
+
+    val world: World
         get() = center.world
 
     open fun initialize() { }
 
     open fun delete() { }
 
+    @Deprecated("use property accessor", ReplaceWith("teamSpawnPoints[team] ?: emptyList()"))
+    fun getTeamSpawnPoints(team: KOTCTeam): List<Location> {
+        return teamSpawnPoints[team] ?: emptyList()
+    }
+
     /**
      * Set the map world border.
      */
     fun setupWorldBorder() {
-        val borderSection = mapSection.getConfigurationSection("border")
-            ?: throw NullPointerException("section border for $id isn't set.")
-
-        // all of these values are doubles, just iterate through it
-        // because we're lazy, this is awful though so don't do this much.
-        setOf("radius", "damage", "damage_buffer").forEach {
-            if(!borderSection.isDouble(it)) {
-                throw IllegalArgumentException("border $it for $id isn't set.")
-            }
-        }
-
-        val radius = borderSection.getDouble("radius")
-        val damage = borderSection.getDouble("damage")
-        val damageBuffer = mapSection.getDouble("damage_buffer")
+        val (radius, damage, damageBuffer) = mapConfig.border
 
         val worldBorder = world.worldBorder
 
@@ -50,35 +53,38 @@ abstract class MicroGameMap(
     }
 
     /**
-     * Border radius from the configuration
-     * @return the border radius.
-     */
-    private fun getBorderRadiusFromConfig(): Double {
-        if (!mapSection.isDouble("border_radius")) {
-            throw IllegalArgumentException("Border radius of map $id isn't set.")
-        }
-
-        return mapSection.getDouble("border_radius")
-    }
-
-    /**
      * All valid spawn points from the configuration.
      * @return spawn locations.
      */
-    private fun getSpawnPointsFromConfig(): Set<Location> {
-        val spawnPointsSection = mapSection.getConfigurationSection("spawnpoints")
-            ?: return emptySet()
+    @Throws(IllegalStateException::class)
+    fun initializeSpawnPoints() {
+        val (teamSpawnPoints, allSpawnPoints) = mapConfig.spawnPoints
 
-        val locations = mutableSetOf<Location>()
+        if(teamSpawnPoints != null) {
+            for((teamId, locationModels) in teamSpawnPoints) {
+                val kotcTeam = try {
+                    KOTCTeam.valueOf(teamId.uppercase())
+                } catch(ex: IllegalArgumentException) {
+                    ex.printStackTrace()
+                    continue
+                }
 
-        for(spawnPointId in spawnPointsSection.getKeys(false)) {
-            val spawnPointLocation = spawnPointsSection.getConfigurationSection(spawnPointId)
-                ?.toBukkitLocation()
-                ?: continue
+                if(_teamSpawnPoints[kotcTeam] == null) {
+                    _teamSpawnPoints[kotcTeam] = mutableListOf()
+                }
 
-            locations.add(spawnPointLocation)
+                _teamSpawnPoints[kotcTeam]?.let {
+                    for(location in locationModels.mapNotNull { model -> model.toBukkitLocation(world.name) }) {
+                        it.add(location)
+                    }
+                }
+            }
         }
 
-        return locations
+        if(allSpawnPoints != null) {
+            allSpawnPoints
+                .mapNotNull { it.toBukkitLocation(world.name) }
+                .forEach { _allSpawnPoints.add(it) }
+        }
     }
 }

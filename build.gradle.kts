@@ -1,3 +1,8 @@
+val bukkit_core_version: String by project
+val bukkit_utilities_version: String by project
+val kyouko_wrapper_version: String by project
+val chest_ui_version: String by project
+
 plugins {
     kotlin("jvm") version "1.8.10"
     kotlin("plugin.serialization") version "1.8.10"
@@ -16,54 +21,54 @@ repositories {
     mavenCentral()
     mavenLocal()
 
-    maven("https://repo.purpurmc.org/snapshots")
+    maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://repo.dmulloy2.net/repository/public/")
 
-    maven {
-        name = "GitHubPackages"
-        url = uri("https://maven.pkg.github.com/SlaxNetwork/kyouko-kt-wrapper")
-        credentials {
-            username = githubActor
-            password = githubToken
-        }
-    }
-
-    maven {
-        name = "GitHubPackages"
-        url = uri("https://maven.pkg.github.com/bukkit-core")
-        credentials {
-            username = githubActor
-            password = githubToken
-        }
-    }
-
-    maven {
-        name = "GitHubPackages"
-        url = uri("https://maven.pkg.github.com/mc-chestui-plus")
-        credentials {
-            username = githubActor
-            password = githubToken
+    // github packages
+    setOf(
+        "SlaxNetwork/kyouko-kt-wrapper",
+        "SlaxNetwork/bukkit-core",
+        "SlaxNetwork/mc-chestui-plus"
+    ).forEach {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/$it")
+            credentials {
+                username = githubActor
+                password = githubToken
+            }
         }
     }
 }
 
 dependencies {
-    compileOnly("org.purpurmc.purpur:purpur-api:1.19.3-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
 
-    compileOnly("io.github.slaxnetwork:bukkit-core:0.0.1")
-    compileOnly("io.github.slaxnetwork:kyouko-wrapper:0.0.1")
+    compileOnly("io.github.slaxnetwork:bukkit-core-api:$bukkit_core_version")
+    implementation("io.github.slaxnetwork:bukkit-utilities:$bukkit_utilities_version")
+    // loaded via bukkit-core
+    compileOnly("io.github.slaxnetwork:kyouko-wrapper:$kyouko_wrapper_version")
 
-    implementation("me.tech:mc-chestui-plus:0.0.1")
+    implementation("me.tech:mc-chestui-plus:$chest_ui_version")
+
+    compileOnly("com.comphenix.protocol:ProtocolLib:4.7.0")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.10")
 
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.10.0")
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.10.0")
+    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.11.0")
+    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.11.0")
 }
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+}
+
+tasks {
+    shadowJar {
+        exclude("kotlin/**/*.class")
+    }
 }
 
 bukkit {
@@ -77,5 +82,11 @@ bukkit {
     commands {
         register("test")
         register("endgame")
+        register("showtesttitle")
+        register("concludevote")
+        register("startvote")
+        register("vote")
+        register("sbtest")
+        register("swapsbtoggle")
     }
 }

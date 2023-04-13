@@ -1,0 +1,12 @@
+{
+  "debug": {
+    "config_override": false,
+    "logging": true
+  },
+  "game": {
+    "start": {
+      "minimum": 3,
+      "maximum": 12
+    }
+  }
+}

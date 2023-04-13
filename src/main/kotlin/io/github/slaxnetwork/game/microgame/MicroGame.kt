@@ -1,23 +1,32 @@
 package io.github.slaxnetwork.game.microgame
 
 import io.github.slaxnetwork.KOTCGame
+import io.github.slaxnetwork.game.microgame.death.MicroGameDeathHandler
 import io.github.slaxnetwork.game.microgame.maps.MicroGameMap
+import io.github.slaxnetwork.game.microgame.player.MicroGamePlayer
+import io.github.slaxnetwork.game.microgame.player.MicroGamePlayerRegistry
 import io.github.slaxnetwork.player.KOTCPlayer
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
 import org.bukkit.event.HandlerList
 import org.bukkit.event.Listener
 import org.bukkit.plugin.PluginManager
 import org.bukkit.scheduler.BukkitScheduler
+import java.util.UUID
 import java.util.function.Consumer
 
-abstract class MicroGame(
+abstract class MicroGame<Player : MicroGamePlayer> (
     val type: MicroGameType,
-    val map: MicroGameMap,
     val scheduler: BukkitScheduler,
-    val playerRegistry: KOTCPlayerRegistry,
+    private val kotcPlayerRegistry: KOTCPlayerRegistry,
 
     private var preGameTimer: Int = 30
 ) {
+    abstract val map: MicroGameMap
+
+    abstract val deathHandler: MicroGameDeathHandler
+
+    val microGamePlayerRegistry = MicroGamePlayerRegistry<Player>()
+
     /**
      * Current state of the [MicroGame].
      */
@@ -38,10 +47,22 @@ abstract class MicroGame(
 
     var winner: KOTCPlayer? = null
 
-    val players get() = playerRegistry.players.values
+    val kotcPlayers get() = kotcPlayerRegistry.players
+
+    val gamePlayers get() = microGamePlayerRegistry.players
+
+    val connectedGamePlayers get() = gamePlayers.filter { it.connected }
 
     private val gameListeners = mutableSetOf<Listener>()
 
+    /**
+     * Actions ran to initialize the [MicroGame].
+     */
+    open fun initialize() { }
+
+    /**
+     * Actions ran at the start of the pre-game.
+     */
     abstract fun startPreGame()
 
     /**
@@ -59,7 +80,7 @@ abstract class MicroGame(
                     state = MicroGameState.IN_GAME
                 }
             },
-            20L, 20L
+            0L, 20L
         )
     }
 
@@ -69,9 +90,23 @@ abstract class MicroGame(
      */
     abstract fun tickPreGameTimer()
 
+    /**
+     * Actions ran once the game has started.
+     */
     abstract fun startGame()
 
+    /**
+     * Actions ran once the game has ended.
+     */
     abstract fun endGame()
+
+    fun findKOTCPlayerByUUID(uuid: UUID): KOTCPlayer? {
+        return kotcPlayerRegistry.findByUUID(uuid)
+    }
+
+    fun findGamePlayerByUUID(uuid: UUID): Player? {
+        return microGamePlayerRegistry.findByUUID(uuid)
+    }
 
     /**
      * Initialize all [Listener] related to a [MicroGame]

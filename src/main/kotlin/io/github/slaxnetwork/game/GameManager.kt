@@ -1,22 +1,26 @@
 package io.github.slaxnetwork.game
 
+import io.github.slaxnetwork.KOTCGame
 import io.github.slaxnetwork.game.microgame.MicroGame
 import io.github.slaxnetwork.game.microgame.MicroGameState
 import io.github.slaxnetwork.game.microgame.MicroGameType
 import io.github.slaxnetwork.game.microgame.maps.MapManager
-import io.github.slaxnetwork.game.microgame.types.skywarsrush.SkyWarsRushMicroGame
+import io.github.slaxnetwork.game.microgame.impl.skywarsrush.SkyWarsRushMicroGame
+import io.github.slaxnetwork.game.vote.GameVoteHandler
 import io.github.slaxnetwork.player.KOTCPlayer
 import io.github.slaxnetwork.player.KOTCPlayerRegistry
 import io.github.slaxnetwork.waitingroom.WaitingRoomManager
 import org.bukkit.plugin.PluginManager
 import org.bukkit.scheduler.BukkitScheduler
+import org.bukkit.scheduler.BukkitTask
 
 class GameManager(
-    val playerRegistry: KOTCPlayerRegistry,
+    private val kotcPlayerRegistry: KOTCPlayerRegistry,
     private val waitingRoomManager: WaitingRoomManager,
     private val mapManager: MapManager,
     private val scheduler: BukkitScheduler,
-    private val pluginManager: PluginManager
+    private val pluginManager: PluginManager,
+    private val gameVoteHandler: GameVoteHandler
 ) {
     val rubiesHandler = RubiesHandler(this, scheduler)
 
@@ -29,7 +33,7 @@ class GameManager(
     /**
      * Current [MicroGame] instance being played.
      */
-    var currentMicroGame: MicroGame? = null
+    var currentMicroGame: MicroGame<*>? = null
         private set(value) {
             // inc round once micro game ends.
             if(value != null) {
@@ -40,10 +44,10 @@ class GameManager(
         }
 
     /**
-     * Whether the game has started.
+     * Whether the KOTC Game has started.
      */
     val hasGameStarted: Boolean
-        get() = round > 0
+        get() = round != 0
 
     val microGameState: MicroGameState
         get() = currentMicroGame?.state ?: MicroGameState.NOT_RUNNING
@@ -55,7 +59,31 @@ class GameManager(
      * Current player holding the crown.
      */
     val currentCrownHolder: KOTCPlayer?
-        get() = playerRegistry.players.values.firstOrNull { it.crownHolder }
+        get() = kotcPlayerRegistry.players.firstOrNull { it.crownHolder }
+
+    private val kotcPlayers get() = kotcPlayerRegistry.players
+
+    private val gameStartHandler = GameStartHandler(kotcPlayerRegistry, this, waitingRoomManager, gameVoteHandler, scheduler)
+
+    fun startGameCountdown(slow: Boolean) {
+        if(hasGameStarted) {
+            return
+        }
+
+        if(slow) {
+            gameStartHandler.startSlowGameCountdown()
+        } else {
+            gameStartHandler.startFastGameCountdown()
+        }
+    }
+
+    fun cancelGameCountdown() {
+        gameStartHandler.cancelGameCountdown()
+    }
+
+    fun startGame() {
+        gameStartHandler.startGame()
+    }
 
     /**
      * Start a [MicroGame].
@@ -72,16 +100,24 @@ class GameManager(
 
         val mapInstance = mapManager.loadMapInstance(microGameType, selectedMapId)
 
-        val microGameInstance = when(microGameType) {
-            MicroGameType.SKYWARS_RUSH -> SkyWarsRushMicroGame(mapInstance, scheduler, playerRegistry)
-
-            else -> throw IllegalStateException("$microGameType is not a supported micro game.")
+        val microGameInstance = try {
+            when(microGameType) {
+                MicroGameType.SKYWARS_RUSH -> SkyWarsRushMicroGame.create(mapInstance, scheduler, kotcPlayerRegistry)
+                else -> throw IllegalStateException("$microGameType is not a supported micro game.")
+            }
+        } catch(ex: Exception) {
+            ex.printStackTrace()
+            return
         }
 
         currentMicroGame = microGameInstance
 
-        microGameInstance.map.initialize()
-        microGameInstance.map.setupWorldBorder()
+        // init map
+        mapInstance.initializeSpawnPoints()
+        mapInstance.initialize()
+        mapInstance.setupWorldBorder()
+        // init micro game
+        microGameInstance.initialize()
         microGameInstance.initializeListeners(pluginManager)
 
         microGameInstance.state = MicroGameState.IN_PRE_GAME
@@ -114,6 +150,11 @@ class GameManager(
 
         waitingRoomManager.setWorldBorder()
 
+//        kotcPlayers.mapNotNull { it.bukkitPlayer }
+//            .forEach {
+//
+//            }
+
         // end kotc.
         if(round == MAX_ROUNDS) {
 //            gameState = GameState.ENDING
@@ -124,13 +165,18 @@ class GameManager(
      * Randomly assign the crown to a player.
      */
     private fun randomlyAssignCrown() {
-        val kotcPlayer = playerRegistry.players.values
+        val kotcPlayer = kotcPlayerRegistry.players
             .filter { it.connected && !it.crownHolder }
-            .shuffled()
-            .firstOrNull()
+            .randomOrNull()
 
         kotcPlayer?.crownHolder = true
     }
+
+//    private class GameStartHandler(private val scheduler: BukkitScheduler) {
+//        fun startGameCountdown() {
+//
+//        }
+//    }
 
     companion object {
         const val MAX_ROUNDS = 3
